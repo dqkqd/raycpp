@@ -1,0 +1,23 @@
+Checks: |-
+  bugprone-*,
+  cert-*,
+  clang-analyzer-*,
+  concurrency-*,
+  cppcoreguidelines-*,
+  hicpp-*,
+  misc-*,
+  modernize-*,
+  performance-*,
+  portability-*,
+  readability-*,
+# Warnings-only in the editor/during dev. For CI:
+#   clang-tidy --warnings-as-errors='*' ...
+WarningsAsErrors: ''
+# Only report diagnostics from our headers, not from system/third-party ones.
+HeaderFilterRegex: '^(src|include)/.*'
+# --fix uses .clang-format for the style of applied fixes.
+FormatStyle: file
+CheckOptions:
+  # Always brace single-line if/else/for bodies.
+  - key: readability-braces-around-statements.ShortStatementLines
+    value: '0'
