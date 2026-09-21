@@ -20,4 +20,8 @@ public:
   [[nodiscard]] double length_square() const;
   [[nodiscard]] double length() const;
   [[nodiscard]] Vec3 unit() const;
+
+  static Vec3 random();
+  static Vec3 random_unit();
+  static Vec3 random_on_hemisphere(const Vec3 &normal);
 };

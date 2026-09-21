@@ -1,4 +1,5 @@
 #include "vec3.hpp"
+#include "utils.h"
 #include <cmath>
 
 Vec3 operator*(const Vec3 &v, double s) {
@@ -29,4 +30,26 @@ Vec3 Vec3::unit() const { return *this / length(); }
 
 bool operator==(const Vec3 &lhs, const Vec3 &rhs) {
   return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z;
+}
+
+Vec3 Vec3::random() {
+  return {.x = random_double(), .y = random_double(), .z = random_double()};
+}
+
+Vec3 Vec3::random_unit() {
+  while (true) {
+    auto vec = random();
+    auto lensq = vec.length_square();
+    if (1e-160 < lensq && lensq <= 1) {
+      return vec / sqrt(lensq);
+    }
+  }
+}
+
+Vec3 Vec3::random_on_hemisphere(const Vec3 &normal) {
+  auto vec = random_unit();
+  if (vec.dot(normal) > 0) {
+    return vec;
+  }
+  return -vec;
 }
