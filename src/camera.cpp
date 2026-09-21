@@ -1,4 +1,7 @@
 #include "camera.hpp"
+#include "color.hpp"
+#include "hit.hpp"
+#include "point.hpp"
 #include "ray.hpp"
 #include "utils.h"
 #include "vec3.hpp"
@@ -79,7 +82,8 @@ Color Camera::ray_color(const Ray &ray, const Hittable &world) {
   auto rec = world.hit(ray, {.tmin = 0.001, .tmax = INFINITY});
   if (rec.has_value()) {
     auto unit_normal = rec->normal_;
-    Color c = {.r = unit_normal.x, .g = unit_normal.y, .b = unit_normal.z};
+    const Color c = {
+        .r = unit_normal.x, .g = unit_normal.y, .b = unit_normal.z};
     return c.lerp({.r = 1, .g = 1, .b = 1}, 0.5);
   }
   return background_color(ray);
@@ -88,7 +92,7 @@ Color Camera::ray_color(const Ray &ray, const Hittable &world) {
 Color Camera::background_color(const Ray &ray) {
   auto unit = ray.direction.unit();
   auto a = 0.5 * (unit.y + 1.0);
-  Color c1 = {.r = 1, .g = 1, .b = 1};
-  Color c2 = {.r = 0.5, .g = 0.7, .b = 1};
+  static Color c1 = {.r = 1, .g = 1, .b = 1};
+  static Color c2 = {.r = 0.5, .g = 0.7, .b = 1};
   return c1.lerp(c2, a);
 }

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <ostream>
 class Vec3 {
 public:
   double x, y, z;
@@ -21,6 +20,4 @@ public:
   [[nodiscard]] double length_square() const;
   [[nodiscard]] double length() const;
   [[nodiscard]] Vec3 unit() const;
-
-  friend std::ostream &operator<<(std::ostream &os, const Vec3 &v);
 };

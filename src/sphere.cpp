@@ -4,6 +4,7 @@
 #include "point.hpp"
 #include "vec3.hpp"
 #include <cmath>
+#include <optional>
 
 Sphere::Sphere(Point center, double radius)
     : center_(center), radius_(radius) {};

@@ -1,5 +1,7 @@
 #include "world.hpp"
+#include "hit.hpp"
 #include "interval.hpp"
+#include "ray.hpp"
 #include <utility>
 
 void World::add(std::unique_ptr<Hittable> &&object) {

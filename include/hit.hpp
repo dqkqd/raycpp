@@ -4,11 +4,13 @@
 #include "point.hpp"
 #include "ray.hpp"
 #include "vec3.hpp"
+#include <cstdint>
+#include <optional>
 
 class HitRecord {
 
 public:
-  enum class Direction : uint8_t { Inward, Outward };
+  enum class Direction : std::uint8_t { Inward, Outward };
 
   Point hit_point_;
   Direction direction_;

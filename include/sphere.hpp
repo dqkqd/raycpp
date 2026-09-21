@@ -4,6 +4,7 @@
 #include "interval.hpp"
 #include "point.hpp"
 #include "vec3.hpp"
+#include <optional>
 
 class Sphere : public Hittable {
 public:

@@ -30,7 +30,3 @@ Vec3 Vec3::unit() const { return *this / length(); }
 bool operator==(const Vec3 &lhs, const Vec3 &rhs) {
   return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z;
 }
-
-std::ostream &operator<<(std::ostream &os, const Vec3 &v) {
-  return os << std::format("Vec3({},{},{})", v.x, v.y, v.z);
-}
