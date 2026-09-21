@@ -18,7 +18,7 @@ Checks: |-
   -misc-non-private-member-variables-in-classes,
   -portability-avoid-pragma-once
 WarningsAsErrors: '*'
-HeaderFilterRegex: '^(src|include)/.*'
+HeaderFilterRegex: '^(src|include|tests)/.*'
 FormatStyle: file
 CheckOptions:
   - key: readability-braces-around-statements.ShortStatementLines
