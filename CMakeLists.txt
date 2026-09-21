@@ -16,7 +16,8 @@ set(LIB_SOURCES
     src/sphere.cpp
     src/hit.cpp
     src/world.cpp
-    src/interval.cpp)
+    src/interval.cpp
+    src/camera.cpp)
 
 add_executable(raycpp src/main.cpp ${LIB_SOURCES})
 

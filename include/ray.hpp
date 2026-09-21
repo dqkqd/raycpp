@@ -1,6 +1,5 @@
 #pragma once
 
-#include "color.hpp"
 #include "point.hpp"
 #include "vec3.hpp"
 
@@ -11,10 +10,5 @@ public:
   Point origin;
   Vec3 direction;
 
-  [[nodiscard]] Color color(const Hittable &world) const;
-
   [[nodiscard]] Point at(double t) const;
-
-private:
-  [[nodiscard]] Color background_color() const;
 };
