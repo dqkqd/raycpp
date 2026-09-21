@@ -25,3 +25,9 @@ target_compile_options(
 
 target_link_options(raycpp PRIVATE
                     $<$<CONFIG:Debug>:-fsanitize=address,undefined>)
+
+# tests
+find_package(Catch2 3 REQUIRED)
+add_executable(tests tests/test.cpp src/color.cpp)
+target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
+target_include_directories(tests PRIVATE include)

@@ -2,7 +2,7 @@
 #include <format>
 #include <ostream>
 
-#include <color.h>
+#include "color.hpp"
 
 std::ostream &operator<<(std::ostream &os, const PrintableColor &c) {
   return os << std::format("{} {} {}\n", c.r, c.g, c.b);

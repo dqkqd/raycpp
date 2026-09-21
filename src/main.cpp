@@ -1,9 +1,11 @@
-#include "color.h"
+#include "color.hpp"
+#include <format>
 #include <fstream>
 #include <iostream>
+#include <string>
 
 int main() {
-  std::string filename{"output.ppm"};
+  const std::string filename{"output.ppm"};
   std::ofstream file{filename, std::ofstream::trunc | std::ofstream::out};
 
   auto image_width = 256;
@@ -13,7 +15,7 @@ int main() {
   for (int j = 0; j < image_height; j++) {
     std::clog << std::format("\rScanlines remaining: ", image_height - j);
     for (int i = 0; i < image_width; i++) {
-      Color c = {
+      const Color c = {
           .r = i * 1.0 / (image_width - 1),
           .g = j * 1.0 / (image_height - 1),
           .b = 0.0,
