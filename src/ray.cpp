@@ -1,10 +1,17 @@
 #include "ray.hpp"
 #include "color.hpp"
+#include "hit.hpp"
+#include <cmath>
+#include <optional>
 
 Color Ray::color() const {
   Sphere s = {.center = {.x = 0, .y = 0, .z = -1}, .radius = 0.5};
-  if (hit(s)) {
-    return {.r = 1, .g = 0, .b = 0};
+
+  auto rec = hit(s);
+  if (rec.has_value()) {
+    auto unit_normal = rec->normal;
+    Color c = {.r = unit_normal.x, .g = unit_normal.y, .b = unit_normal.z};
+    return c.lerp({.r = 1, .g = 1, .b = 1}, 0.5);
   }
   return background_color();
 }
@@ -17,10 +24,24 @@ Color Ray::background_color() const {
   return c1.lerp(c2, a);
 }
 
-bool Ray::hit(const Sphere &sphere) const {
+Point Ray::at(double t) const { return origin + t * direction; }
+
+std::optional<HitRecord> Ray::hit(const Sphere &sphere) const {
   auto oc = sphere.center - origin;
   auto a = direction.dot(direction);
-  auto b = -2 * direction.dot(oc);
+  auto b = direction.dot(oc);
   auto c = oc.dot(oc) - (sphere.radius * sphere.radius);
-  return (b * b) - (4 * a * c) >= 0;
+  auto delta = (b * b) - (a * c);
+  if (delta < 0) {
+    return {};
+  }
+
+  auto delta_s = sqrt(delta);
+
+  auto distance = (b - delta_s) / a;
+  auto hit_point = at(distance);
+  auto normal = sphere.normal(hit_point).unit();
+
+  return HitRecord{
+      .hit_point = hit_point, .normal = normal, .distance = distance};
 }
