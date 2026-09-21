@@ -15,6 +15,10 @@ Vec3 operator+(const Vec3 &lhs, const Vec3 &rhs) {
   return {.x = lhs.x + rhs.x, .y = lhs.y + rhs.y, .z = lhs.z + rhs.z};
 }
 
+double Vec3::dot(const Vec3 &other) const {
+  return (x * other.x) + (y * other.y) + (z * other.z);
+}
+
 double Vec3::length_square() const { return (x * x) + (y * y) + (z * z); }
 
 double Vec3::length() const { return sqrt(length_square()); }
@@ -23,4 +27,8 @@ Vec3 Vec3::unit() const { return *this / length(); }
 
 bool operator==(const Vec3 &lhs, const Vec3 &rhs) {
   return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z;
+}
+
+std::ostream &operator<<(std::ostream &os, const Vec3 &v) {
+  return os << std::format("Vec3({},{},{})", v.x, v.y, v.z);
 }

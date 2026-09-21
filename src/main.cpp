@@ -17,19 +17,20 @@ int main() {
 
   auto focal_length = 1.0;
   auto viewport_height = 2.0;
-  auto viewport_width = viewport_height / image_height * image_width;
+  auto viewport_width = viewport_height * image_width / image_height;
 
   auto camera_center = Point{.x = 0, .y = 0, .z = 0};
   auto viewport_u = Vec3{.x = viewport_width, .y = 0, .z = 0};
   auto viewport_v = Vec3{.x = 0, .y = -viewport_height, .z = 0};
 
-  auto pixel_delta_u = viewport_u / viewport_width;
-  auto pixel_delta_v = viewport_v / viewport_height;
+  auto pixel_delta_u = viewport_u / image_width;
+  auto pixel_delta_v = viewport_v / image_height;
 
   auto viewport_upper_left = camera_center -
                              Vec3{.x = 0, .y = 0, .z = focal_length} -
                              viewport_u / 2 - viewport_v / 2;
-  auto pixel00_loc = viewport_upper_left + 0.5 * (viewport_u + viewport_v);
+  auto pixel00_loc =
+      viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);
 
   file << std::format("P3\n{} {}\n255\n", image_width, image_height);
 

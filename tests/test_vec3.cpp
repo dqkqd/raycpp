@@ -33,3 +33,9 @@ TEST_CASE("vec3 unit") {
   const Vec3 v = {.x = 1, .y = 2, .z = 3};
   REQUIRE(v.unit() == (Vec3){1 / sqrt(14), 2 / sqrt(14), 3 / sqrt(14)});
 }
+
+TEST_CASE("vec3 dot") {
+  const Vec3 u = {.x = 1, .y = 2, .z = 3};
+  const Vec3 v = {.x = 2, .y = 3, .z = 4};
+  REQUIRE(u.dot(v) == 20);
+}

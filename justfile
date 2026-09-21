@@ -19,12 +19,12 @@ test:
 
 run:
     cmake -B build -DCMAKE_BUILD_TYPE=Release
-    cmake --build build
+    cmake --build build --target raycpp
     ./build/raycpp
 
 run_debug:
     cmake -B build -DCMAKE_BUILD_TYPE=Debug
-    cmake --build build
+    cmake --build build --target raycpp
     ./build/raycpp
 
 clean:
