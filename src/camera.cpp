@@ -89,7 +89,7 @@ Color Camera::ray_color(const Ray &ray, const Hittable &world, int depth) {
   }
   auto rec = world.hit(ray, {.tmin = 0.001, .tmax = INFINITY});
   if (rec.has_value()) {
-    auto direction = Vec3::random_on_hemisphere(rec->normal_);
+    auto direction = rec->normal_ + Vec3::random_unit();
     auto next_ray = Ray{.origin = rec->hit_point_, .direction = direction};
     return 0.5 * ray_color(next_ray, world, depth - 1);
   }

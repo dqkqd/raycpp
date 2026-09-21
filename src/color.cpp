@@ -4,6 +4,7 @@
 
 #include "color.hpp"
 #include "interval.hpp"
+#include "utils.h"
 
 Color Color::lerp(const Color &other, double a) const {
   return (1 - a) * *this + a * other;
@@ -28,9 +29,9 @@ Color &Color::operator+=(const Color &other) {
 
 PrintableColor Color::printable() const {
   static const Interval intensity{.tmin = 0.000, .tmax = 0.999};
-  auto ir = static_cast<uint8_t>(256 * intensity.clamp(r));
-  auto ig = static_cast<uint8_t>(256 * intensity.clamp(g));
-  auto ib = static_cast<uint8_t>(256 * intensity.clamp(b));
+  auto ir = static_cast<uint8_t>(256 * intensity.clamp(linear_to_gammar(r)));
+  auto ig = static_cast<uint8_t>(256 * intensity.clamp(linear_to_gammar(g)));
+  auto ib = static_cast<uint8_t>(256 * intensity.clamp(linear_to_gammar(b)));
   return {.r = ir, .g = ig, .b = ib};
 }
 

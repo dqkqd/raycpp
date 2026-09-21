@@ -13,3 +13,5 @@ inline double random_double() {
 inline double random_double(double min, double max) {
   return min + ((max - min) * random_double());
 }
+
+inline double linear_to_gammar(double l) { return l > 0 ? sqrt(l) : 0; }
