@@ -18,6 +18,7 @@ public:
   friend Color operator*(const Color &c, double s);
   friend Color operator*(double s, const Color &c);
   friend Color operator+(const Color &lhs, const Color &rhs);
+  friend Color operator*(const Color &lhs, const Color &rhs);
 
   Color &operator+=(const Color &other);
 

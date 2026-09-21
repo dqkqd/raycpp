@@ -1,14 +1,17 @@
 #include "sphere.hpp"
 #include "hit.hpp"
 #include "interval.hpp"
+#include "material.hpp"
 #include "point.hpp"
 #include "ray.hpp"
 #include "vec3.hpp"
 #include <cmath>
+#include <memory>
 #include <optional>
+#include <utility>
 
-Sphere::Sphere(Point center, double radius)
-    : center_(center), radius_(radius) {};
+Sphere::Sphere(Point center, double radius, std::shared_ptr<Material> material)
+    : center_(center), radius_(radius), material_(std::move(material)) {};
 
 Vec3 Sphere::outward_normal(const Point &at) const {
   return (at - center_).unit();
@@ -38,8 +41,9 @@ std::optional<HitRecord> Sphere::hit(const Ray &ray, Interval interval) const {
   auto normal = outward_normal(hit_point);
 
   if (normal.dot(ray.direction) > 0) {
-    return HitRecord(hit_point, HitRecord::Direction::Inward, -normal,
-                     distance);
+    return HitRecord(hit_point, HitRecord::Direction::Inward, -normal, distance,
+                     material_);
   }
-  return HitRecord(hit_point, HitRecord::Direction::Outward, normal, distance);
+  return HitRecord(hit_point, HitRecord::Direction::Outward, normal, distance,
+                   material_);
 }

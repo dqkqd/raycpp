@@ -83,15 +83,18 @@ Ray Camera::sample_ray(int i, int j) const {
 }
 
 Color Camera::ray_color(const Ray &ray, const Hittable &world, int depth) {
+  static const Color black = {.r = 0, .g = 0, .b = 0};
   if (depth <= 0) {
-    static const Color black = {.r = 0, .g = 0, .b = 0};
     return black;
   }
   auto rec = world.hit(ray, {.tmin = 0.001, .tmax = INFINITY});
   if (rec.has_value()) {
-    auto direction = rec->normal_ + Vec3::random_unit();
-    auto next_ray = Ray{.origin = rec->hit_point_, .direction = direction};
-    return 0.5 * ray_color(next_ray, world, depth - 1);
+    auto scatter = rec->material_->scatter(ray, *rec);
+    if (scatter.has_value()) {
+      return scatter->attenuation *
+             ray_color(scatter->scattered, world, depth - 1);
+    }
+    return black;
   }
   return background_color(ray);
 }

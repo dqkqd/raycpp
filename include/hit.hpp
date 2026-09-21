@@ -1,10 +1,12 @@
 #pragma once
 
 #include "interval.hpp"
+#include "material.hpp"
 #include "point.hpp"
 #include "ray.hpp"
 #include "vec3.hpp"
 #include <cstdint>
+#include <memory>
 #include <optional>
 
 class HitRecord {
@@ -16,8 +18,10 @@ public:
   Direction direction_;
   Vec3 normal_;
   double distance_;
+  std::shared_ptr<Material> material_;
 
-  HitRecord(Point hit_point, Direction direction, Vec3 normal, double distance);
+  HitRecord(Point hit_point, Direction direction, Vec3 normal, double distance,
+            std::shared_ptr<Material> material);
 };
 
 class Hittable {

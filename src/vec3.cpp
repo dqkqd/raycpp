@@ -16,10 +16,19 @@ Vec3 operator+(const Vec3 &lhs, const Vec3 &rhs) {
   return {.x = lhs.x + rhs.x, .y = lhs.y + rhs.y, .z = lhs.z + rhs.z};
 }
 
+Vec3 operator-(const Vec3 &lhs, const Vec3 &rhs) {
+  return {.x = lhs.x - rhs.x, .y = lhs.y - rhs.y, .z = lhs.z - rhs.z};
+}
+
 Vec3 Vec3::operator-() const { return {.x = -x, .y = -y, .z = -z}; }
 
 double Vec3::dot(const Vec3 &other) const {
   return (x * other.x) + (y * other.y) + (z * other.z);
+}
+
+bool Vec3::near_zero() const {
+  static const auto s = 1e-8;
+  return fabs(x) < s && fabs(y) < s && fabs(z) < s;
 }
 
 double Vec3::length_square() const { return (x * x) + (y * y) + (z * z); }
@@ -52,10 +61,6 @@ Vec3 Vec3::random_unit() {
   }
 }
 
-Vec3 Vec3::random_on_hemisphere(const Vec3 &normal) {
-  auto vec = random_unit();
-  if (vec.dot(normal) > 0) {
-    return vec;
-  }
-  return -vec;
+Vec3 Vec3::reflect(const Vec3 &normal) const {
+  return *this - 2 * dot(normal) * normal;
 }

@@ -20,6 +20,10 @@ Color operator+(const Color &lhs, const Color &rhs) {
   return {.r = lhs.r + rhs.r, .g = lhs.g + rhs.g, .b = lhs.b + rhs.b};
 }
 
+Color operator*(const Color &lhs, const Color &rhs) {
+  return {.r = lhs.r * rhs.r, .g = lhs.g * rhs.g, .b = lhs.b * rhs.b};
+}
+
 Color &Color::operator+=(const Color &other) {
   r += other.r;
   g += other.g;
