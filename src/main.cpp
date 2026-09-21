@@ -1,6 +1,7 @@
 #include "color.hpp"
 #include "point.hpp"
 #include "ray.hpp"
+#include "sphere.hpp"
 #include "vec3.hpp"
 #include <format>
 #include <fstream>
@@ -41,7 +42,8 @@ int main() {
           pixel00_loc + (i * pixel_delta_u) + (j * pixel_delta_v);
       auto ray_direction = pixcel_center - camera_center;
       auto ray = Ray{.origin = camera_center, .direction = ray_direction};
-      file << ray.color().printable();
+      auto sphere = Sphere(Point{.x = 0, .y = 0, .z = -1}, 0.5);
+      file << ray.color(sphere).printable();
     }
   }
 

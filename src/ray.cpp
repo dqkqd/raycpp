@@ -1,13 +1,9 @@
 #include "ray.hpp"
 #include "color.hpp"
 #include "hit.hpp"
-#include <cmath>
-#include <optional>
 
-Color Ray::color() const {
-  Sphere s = {.center = {.x = 0, .y = 0, .z = -1}, .radius = 0.5};
-
-  auto rec = hit(s);
+Color Ray::color(const Hittable &hittable) const {
+  auto rec = hittable.hit(*this);
   if (rec.has_value()) {
     auto unit_normal = rec->normal;
     Color c = {.r = unit_normal.x, .g = unit_normal.y, .b = unit_normal.z};
@@ -25,23 +21,3 @@ Color Ray::background_color() const {
 }
 
 Point Ray::at(double t) const { return origin + t * direction; }
-
-std::optional<HitRecord> Ray::hit(const Sphere &sphere) const {
-  auto oc = sphere.center - origin;
-  auto a = direction.dot(direction);
-  auto b = direction.dot(oc);
-  auto c = oc.dot(oc) - (sphere.radius * sphere.radius);
-  auto delta = (b * b) - (a * c);
-  if (delta < 0) {
-    return {};
-  }
-
-  auto delta_s = sqrt(delta);
-
-  auto distance = (b - delta_s) / a;
-  auto hit_point = at(distance);
-  auto normal = sphere.normal(hit_point).unit();
-
-  return HitRecord{
-      .hit_point = hit_point, .normal = normal, .distance = distance};
-}
