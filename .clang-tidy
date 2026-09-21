@@ -10,6 +10,10 @@ Checks: |-
   performance-*,
   portability-*,
   readability-*,
+  -modernize-use-trailing-return-type
+  -cppcoreguidelines-avoid-magic-numbers
+  -readability-magic-numbers
+  -readability-identifier-length
 # Warnings-only in the editor/during dev. For CI:
 #   clang-tidy --warnings-as-errors='*' ...
 WarningsAsErrors: ''

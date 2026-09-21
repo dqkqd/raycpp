@@ -17,8 +17,6 @@ target_compile_options(raycpp PRIVATE
     -Wall -Wextra -Wpedantic
     -Wshadow
     -Wundef
-    -Wmissing-prototypes
-    -Wstrict-prototypes
     -Wdouble-promotion
     -Wvla
     $<$<CONFIG:Release>:-O2>
