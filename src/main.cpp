@@ -15,9 +15,9 @@ int main() {
   auto material_center =
       std::make_shared<Lambertian>(Color{.r = 0.1, .g = 0.2, .b = 0.5});
   auto material_left =
-      std::make_shared<Metal>(Color{.r = 0.8, .g = 0.8, .b = 0.8});
+      std::make_shared<Metal>(Color{.r = 0.8, .g = 0.8, .b = 0.8}, 0.3);
   auto material_right =
-      std::make_shared<Metal>(Color{.r = 0.8, .g = 0.6, .b = 0.2});
+      std::make_shared<Metal>(Color{.r = 0.8, .g = 0.6, .b = 0.2}, 1.0);
 
   world.add(std::make_unique<Sphere>(Point{.x = 0, .y = -100.5, .z = -1}, 100,
                                      material_ground));

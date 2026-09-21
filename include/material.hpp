@@ -38,11 +38,12 @@ private:
 
 class Metal : public Material {
 public:
-  explicit Metal(Color albedo);
+  explicit Metal(Color albedo, double fuzz);
 
   [[nodiscard]] std::optional<Scatter>
   scatter(const Ray &ray, const HitRecord &rec) const override;
 
 private:
   Color albedo_;
+  double fuzz_;
 };
