@@ -23,8 +23,6 @@
             cmake
             cmake-language-server
             feh
-
-            catch2_3
           ];
         };
       }

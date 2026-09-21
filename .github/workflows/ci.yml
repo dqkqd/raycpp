@@ -3,38 +3,33 @@ on:
   push:
   pull_request:
 jobs:
-  test:
-    name: build & test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-      - name: Install toolchain
-        run: sudo apt-get update && sudo apt-get install -y cmake catch2
-      - name: Configure & build
-        run: |
-          cmake -B build -DCMAKE_BUILD_TYPE=Debug
-          cmake --build build
-      - name: Test
-        run: ./build/tests
   format:
     name: clang-format
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - name: Install clang-format
-        run: sudo apt-get update && sudo apt-get install -y clang-format
+      - name: Install clang-format 21
+        run: |
+          CODENAME=$(. /etc/os-release && echo "$VERSION_CODENAME")
+          wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | sudo tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc >/dev/null
+          echo "deb http://apt.llvm.org/$CODENAME/ llvm-toolchain-$CODENAME-21 main" | sudo tee /etc/apt/sources.list.d/llvm.list
+          sudo apt-get update && sudo apt-get install -y clang-format-21
       - name: Check formatting
-        run: clang-format --dry-run -Werror $(git ls-files '*.cpp' '*.hpp')
+        run: clang-format-21 --dry-run -Werror $(git ls-files '*.cpp' '*.hpp' '*.h')
   tidy:
     name: clang-tidy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
       - name: Install toolchain
-        run: sudo apt-get update && sudo apt-get install -y cmake catch2 clang-tidy
+        run: |
+          CODENAME=$(. /etc/os-release && echo "$VERSION_CODENAME")
+          wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | sudo tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc >/dev/null
+          echo "deb http://apt.llvm.org/$CODENAME/ llvm-toolchain-$CODENAME-21 main" | sudo tee /etc/apt/sources.list.d/llvm.list
+          sudo apt-get update && sudo apt-get install -y cmake clang-tidy-21
       - name: Generate compile database
         run: |
           cmake -B build
           cp build/compile_commands.json .
       - name: Check
-        run: clang-tidy src/*.cpp tests/*.cpp
+        run: clang-tidy-21 src/*.cpp

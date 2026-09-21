@@ -1,4 +1,5 @@
 #include "point.hpp"
+#include "vec3.hpp"
 
 Vec3 operator-(const Point &lhs, const Point &rhs) {
   return {.x = lhs.x - rhs.x, .y = lhs.y - rhs.y, .z = lhs.z - rhs.z};

@@ -2,6 +2,7 @@
 #include "hit.hpp"
 #include "interval.hpp"
 #include "point.hpp"
+#include "ray.hpp"
 #include "vec3.hpp"
 #include <cmath>
 #include <optional>

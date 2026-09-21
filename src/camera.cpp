@@ -6,8 +6,10 @@
 #include "utils.h"
 #include "vec3.hpp"
 #include <cmath>
+#include <format>
 #include <fstream>
 #include <iostream>
+#include <string>
 
 Camera Camera::init(double aspect_ratio, int image_width,
                     int samples_per_pixel) {
@@ -92,7 +94,7 @@ Color Camera::ray_color(const Ray &ray, const Hittable &world) {
 Color Camera::background_color(const Ray &ray) {
   auto unit = ray.direction.unit();
   auto a = 0.5 * (unit.y + 1.0);
-  static Color c1 = {.r = 1, .g = 1, .b = 1};
-  static Color c2 = {.r = 0.5, .g = 0.7, .b = 1};
+  static const Color c1 = {.r = 1, .g = 1, .b = 1};
+  static const Color c2 = {.r = 0.5, .g = 0.7, .b = 1};
   return c1.lerp(c2, a);
 }
