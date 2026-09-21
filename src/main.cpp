@@ -3,9 +3,11 @@
 #include "ray.hpp"
 #include "sphere.hpp"
 #include "vec3.hpp"
+#include "world.hpp"
 #include <format>
 #include <fstream>
 #include <iostream>
+#include <memory>
 #include <string>
 
 int main() {
@@ -35,6 +37,10 @@ int main() {
 
   file << std::format("P3\n{} {}\n255\n", image_width, image_height);
 
+  auto world = World();
+  world.add(std::make_unique<Sphere>(Point{.x = 0, .y = 0, .z = -1}, 0.5));
+  world.add(std::make_unique<Sphere>(Point{.x = 0, .y = -100.5, .z = -1}, 100));
+
   for (int j = 0; j < image_height; j++) {
     std::clog << std::format("\rScanlines remaining: ", image_height - j);
     for (int i = 0; i < image_width; i++) {
@@ -42,8 +48,7 @@ int main() {
           pixel00_loc + (i * pixel_delta_u) + (j * pixel_delta_v);
       auto ray_direction = pixcel_center - camera_center;
       auto ray = Ray{.origin = camera_center, .direction = ray_direction};
-      auto sphere = Sphere(Point{.x = 0, .y = 0, .z = -1}, 0.5);
-      file << ray.color(sphere).printable();
+      file << ray.color(world).printable();
     }
   }
 

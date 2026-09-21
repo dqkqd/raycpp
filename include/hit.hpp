@@ -1,5 +1,6 @@
 #pragma once
 
+#include "interval.hpp"
 #include "point.hpp"
 #include "ray.hpp"
 #include "vec3.hpp"
@@ -26,5 +27,6 @@ public:
   Hittable &operator=(Hittable &&) = delete;
 
   virtual ~Hittable() = default;
-  [[nodiscard]] virtual std::optional<HitRecord> hit(const Ray &ray) const = 0;
+  [[nodiscard]] virtual std::optional<HitRecord>
+  hit(const Ray &ray, Interval interval) const = 0;
 };

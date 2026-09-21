@@ -8,8 +8,15 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-set(LIB_SOURCES src/color.cpp src/ray.cpp src/vec3.cpp src/point.cpp
-                src/sphere.cpp src/hit.cpp)
+set(LIB_SOURCES
+    src/color.cpp
+    src/ray.cpp
+    src/vec3.cpp
+    src/point.cpp
+    src/sphere.cpp
+    src/hit.cpp
+    src/world.cpp
+    src/interval.cpp)
 
 add_executable(raycpp src/main.cpp ${LIB_SOURCES})
 

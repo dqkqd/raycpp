@@ -1,9 +1,10 @@
 #include "ray.hpp"
 #include "color.hpp"
 #include "hit.hpp"
+#include <cmath>
 
-Color Ray::color(const Hittable &hittable) const {
-  auto rec = hittable.hit(*this);
+Color Ray::color(const Hittable &world) const {
+  auto rec = world.hit(*this, {.tmin = 0.001, .tmax = INFINITY});
   if (rec.has_value()) {
     auto unit_normal = rec->normal_;
     Color c = {.r = unit_normal.x, .g = unit_normal.y, .b = unit_normal.z};

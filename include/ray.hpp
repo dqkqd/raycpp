@@ -11,7 +11,7 @@ public:
   Point origin;
   Vec3 direction;
 
-  [[nodiscard]] Color color(const Hittable &hittable) const;
+  [[nodiscard]] Color color(const Hittable &world) const;
 
   [[nodiscard]] Point at(double t) const;
 
