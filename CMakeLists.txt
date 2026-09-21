@@ -10,6 +10,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_executable(raycpp
     src/main.cpp
+
+    src/color.cpp
 )
 
 target_include_directories(raycpp PRIVATE include)

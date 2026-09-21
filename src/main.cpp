@@ -1,3 +1,4 @@
+#include "color.h"
 #include <fstream>
 #include <iostream>
 
@@ -12,15 +13,13 @@ int main() {
   for (int j = 0; j < image_height; j++) {
     std::clog << std::format("\rScanlines remaining: ", image_height - j);
     for (int i = 0; i < image_width; i++) {
-      auto r = i * 1.0 / (image_width - 1);
-      auto g = j * 1.0 / (image_height - 1);
-      auto b = 0.0;
+      Color c = {
+          .r = i * 1.0 / (image_width - 1),
+          .g = j * 1.0 / (image_height - 1),
+          .b = 0.0,
+      };
 
-      int ir = static_cast<int>(r * 255.999);
-      int ig = static_cast<int>(g * 255.999);
-      int ib = static_cast<int>(b * 255.999);
-
-      file << std::format("{} {} {}\n", ir, ig, ib);
+      file << c.printable();
     }
   }
 
