@@ -14,6 +14,7 @@ std::optional<HitRecord> World::hit(const Ray &ray, Interval interval) const {
   std::optional<HitRecord> best = {};
 
   for (const auto &object : objects) {
+    // TODO(khanhdq): return the distance, construct the hit record later
     auto rec = object->hit(ray, interval);
     if (rec.has_value()) {
       best = rec;
