@@ -5,7 +5,7 @@
 Color Ray::color(const Hittable &hittable) const {
   auto rec = hittable.hit(*this);
   if (rec.has_value()) {
-    auto unit_normal = rec->normal;
+    auto unit_normal = rec->normal_;
     Color c = {.r = unit_normal.x, .g = unit_normal.y, .b = unit_normal.z};
     return c.lerp({.r = 1, .g = 1, .b = 1}, 0.5);
   }

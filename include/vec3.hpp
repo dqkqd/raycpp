@@ -12,6 +12,7 @@ public:
 
   // vector operator
   friend Vec3 operator+(const Vec3 &lhs, const Vec3 &rhs);
+  Vec3 operator-() const;
 
   friend bool operator==(const Vec3 &lhs, const Vec3 &rhs);
 

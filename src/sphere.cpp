@@ -7,7 +7,9 @@
 Sphere::Sphere(Point center, double radius)
     : center_(center), radius_(radius) {};
 
-Vec3 Sphere::outward_normal(const Point &at) const { return at - center_; }
+Vec3 Sphere::outward_normal(const Point &at) const {
+  return (at - center_).unit();
+}
 
 std::optional<HitRecord> Sphere::hit(const Ray &ray) const {
   auto oc = center_ - ray.origin;
@@ -23,8 +25,12 @@ std::optional<HitRecord> Sphere::hit(const Ray &ray) const {
 
   auto distance = (b - delta_s) / a;
   auto hit_point = ray.at(distance);
-  auto normal = outward_normal(hit_point).unit();
+  auto normal = outward_normal(hit_point);
 
-  return HitRecord{
-      .hit_point = hit_point, .normal = normal, .distance = distance};
+  if (normal.dot(ray.direction) > 0) {
+    return HitRecord(hit_point, HitRecord::Direction::Inward, -normal,
+                     distance);
+  }
+
+  return HitRecord(hit_point, HitRecord::Direction::Outward, normal, distance);
 }
