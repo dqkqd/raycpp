@@ -7,7 +7,8 @@
 
 class Camera {
 public:
-  static Camera init(double aspect_ratio, int image_width);
+  static Camera init(double aspect_ratio, int image_width,
+                     int samples_per_pixel);
 
   [[nodiscard]] bool render(const Hittable &world) const;
 
@@ -15,14 +16,20 @@ private:
   int image_width_;
   int image_height_;
 
+  int samples_per_pixel_;
+  double pixel_samples_scale_;
+
   Point center_;
   Point pixel00_loc_;
   Vec3 pixel_delta_u_;
   Vec3 pixel_delta_v_;
 
-  Camera(int image_width, int image_height, Point center, Point pixel00_loc,
+  Camera(int image_width, int image_height, int samples_per_pixel,
+         double pixel_samples_scale, Point center, Point pixel00_loc,
          Vec3 pixel_delta_u, Vec3 pixel_delta_v);
 
-  [[nodiscard]] static Color color(const Ray &ray, const Hittable &world);
+  [[nodiscard]] static Color ray_color(const Ray &ray, const Hittable &world);
   [[nodiscard]] static Color background_color(const Ray &ray);
+
+  [[nodiscard]] Ray sample_ray(int i, int j) const;
 };

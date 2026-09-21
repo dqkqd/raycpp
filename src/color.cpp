@@ -3,6 +3,7 @@
 #include <ostream>
 
 #include "color.hpp"
+#include "interval.hpp"
 
 Color Color::lerp(const Color &other, double a) const {
   return (1 - a) * *this + a * other;
@@ -18,10 +19,18 @@ Color operator+(const Color &lhs, const Color &rhs) {
   return {.r = lhs.r + rhs.r, .g = lhs.g + rhs.g, .b = lhs.b + rhs.b};
 }
 
+Color &Color::operator+=(const Color &other) {
+  r += other.r;
+  g += other.g;
+  b += other.b;
+  return *this;
+}
+
 PrintableColor Color::printable() const {
-  auto ir = static_cast<uint8_t>(r * 255.999);
-  auto ig = static_cast<uint8_t>(g * 255.999);
-  auto ib = static_cast<uint8_t>(b * 255.999);
+  static const Interval intensity{.tmin = 0.000, .tmax = 0.999};
+  auto ir = static_cast<uint8_t>(256 * intensity.clamp(r));
+  auto ig = static_cast<uint8_t>(256 * intensity.clamp(g));
+  auto ib = static_cast<uint8_t>(256 * intensity.clamp(b));
   return {.r = ir, .g = ig, .b = ib};
 }
 
