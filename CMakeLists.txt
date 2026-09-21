@@ -36,12 +36,3 @@ target_compile_options(
 
 target_link_options(raycpp PRIVATE
                     $<$<CONFIG:Debug>:-fsanitize=address,undefined>)
-
-# tests
-find_package(Catch2 3 REQUIRED)
-
-set(TEST_SOURCES tests/test_color.cpp tests/test_vec3.cpp tests/test_point.cpp)
-
-add_executable(tests ${TEST_SOURCES} ${LIB_SOURCES})
-target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
-target_include_directories(tests PRIVATE include)

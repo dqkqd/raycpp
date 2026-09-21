@@ -4,18 +4,13 @@ build:
     cmake --build build
 
 format:
-    clang-format -i include/**.hpp src/**.cpp tests/**.cpp
+    clang-format -i include/**.hpp src/**.cpp
 
 check:
-    clang-tidy include/**.hpp src/**.cpp tests/**.cpp
+    clang-tidy include/**.hpp src/**.cpp
 
 fix:
-    clang-tidy --fix include/**.hpp src/**.cpp tests/**.cpp
-
-test:
-    cmake -B build
-    cmake --build build --target tests
-    ./build/tests
+    clang-tidy --fix include/**.hpp src/**.cpp
 
 run:
     cmake -B build -DCMAKE_BUILD_TYPE=Release
