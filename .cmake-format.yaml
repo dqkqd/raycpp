@@ -1,0 +1,7 @@
+format:
+  line_width: 80
+  tab_size: 2
+layout:
+  separate_ctrl_name_with_space: false
+markup:
+  enable_markup: false

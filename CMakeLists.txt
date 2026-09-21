@@ -8,7 +8,9 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_executable(raycpp src/main.cpp src/color.cpp)
+set(LIB_SOURCES src/color.cpp src/ray.cpp src/vec3.cpp src/point.cpp)
+
+add_executable(raycpp src/main.cpp ${LIB_SOURCES})
 
 target_include_directories(raycpp PRIVATE include)
 target_compile_options(
@@ -28,6 +30,9 @@ target_link_options(raycpp PRIVATE
 
 # tests
 find_package(Catch2 3 REQUIRED)
-add_executable(tests tests/test.cpp src/color.cpp)
+
+set(TEST_SOURCES tests/test_color.cpp tests/test_vec3.cpp tests/test_point.cpp)
+
+add_executable(tests ${TEST_SOURCES} ${LIB_SOURCES})
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
 target_include_directories(tests PRIVATE include)
