@@ -1,8 +1,3 @@
-build:
-    cmake -B build
-    cp ./build/compile_commands.json .
-    cmake --build build
-
 format:
     clang-format -i include/**.hpp src/**.cpp
 
@@ -18,9 +13,10 @@ run:
     ./build/raycpp
 
 run_debug:
-    cmake -B build -DCMAKE_BUILD_TYPE=Debug
-    cmake --build build --target raycpp
-    ./build/raycpp
+    cmake -B build_debug -DCMAKE_BUILD_TYPE=Debug
+    cmake --build build_debug --target raycpp
+    ./build_debug/raycpp
 
 clean:
     rm -rf build
+    rm -rf build_debug

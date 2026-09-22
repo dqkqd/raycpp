@@ -4,6 +4,7 @@
 #include "hit.hpp"
 #include "point.hpp"
 #include "vec3.hpp"
+#include <string>
 
 class Camera {
 public:
@@ -15,6 +16,8 @@ public:
   [[nodiscard]] bool render(const Hittable &world) const;
 
 private:
+  static const int N_CHUNKS = 2;
+
   int image_width_;
   int image_height_;
 
@@ -43,4 +46,11 @@ private:
 
   [[nodiscard]] Ray sample_ray(int i, int j) const;
   [[nodiscard]] Point defocus_disk_sample() const;
+
+  // image chunk name
+  static std::string image_chunk_name(int chunk);
+  // write image from height_from to height_to
+  [[nodiscard]] bool write_chunk(int chunk, const Hittable &world) const;
+  // merge all chunked images into the final one
+  [[nodiscard]] bool merge_chunks() const;
 };

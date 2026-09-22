@@ -60,27 +60,63 @@ Camera::Camera(int image_width, int image_height, int samples_per_pixel,
       defocus_disk_u_(defocus_disk_u), defocus_disk_v_(defocus_disk_v) {}
 
 bool Camera::render(const Hittable &world) const {
-  const std::string filename{"output.ppm"};
-  std::ofstream file{filename, std::ofstream::trunc | std::ofstream::out};
-  if (!file.is_open()) {
+  for (int chunk = 0; chunk < N_CHUNKS; chunk++) {
+    if (!write_chunk(chunk, world)) {
+      return false;
+    }
+  }
+  return merge_chunks();
+}
+
+std::string Camera::image_chunk_name(int chunk) {
+  return std::format("chunk_{}.ppm", chunk);
+}
+
+// write chunk of images
+bool Camera::write_chunk(int chunk, const Hittable &world) const {
+  std::ofstream chunk_file{image_chunk_name(chunk),
+                           std::ofstream::trunc | std::ofstream::out};
+  if (!chunk_file.is_open()) {
     return false;
   }
+  auto chunk_size = image_height_ / N_CHUNKS;
+  auto height_from = chunk * chunk_size;
 
-  file << std::format("P3\n{} {}\n255\n", image_width_, image_height_);
+  // the last chunk must contain all the height
+  auto height_to =
+      chunk == N_CHUNKS - 1 ? image_height_ : (chunk + 1) * chunk_size;
 
-  for (int j = 0; j < image_height_; j++) {
-    std::clog << std::format("\rScanlines remaining: {} ", image_height_ - j);
+  for (int j = height_from; j < height_to; j++) {
+    std::clog << std::format("\rChunk: {}. Scanlines remaining: {} ", chunk,
+                             height_to - j);
     for (int i = 0; i < image_width_; i++) {
       Color color = {.r = 0, .g = 0, .b = 0};
       for (int sample = 0; sample < samples_per_pixel_; sample++) {
         auto ray = sample_ray(i, j);
         color += ray_color(ray, world, max_depth_);
       }
-      file << (color * pixel_samples_scale_).printable();
+      chunk_file << (color * pixel_samples_scale_).printable();
     }
   }
 
-  std::clog << "\rDone                    \n";
+  return true;
+}
+
+bool Camera::merge_chunks() const {
+  std::ofstream file{"output.ppm", std::ofstream::trunc | std::ofstream::out};
+  if (!file.is_open()) {
+    return false;
+  }
+  file << std::format("P3\n{} {}\n255\n", image_width_, image_height_);
+
+  for (int chunk = 0; chunk < N_CHUNKS; chunk++) {
+    std::ifstream chunk_file{image_chunk_name(chunk), std::ifstream::in};
+    if (!chunk_file.is_open()) {
+      return false;
+    }
+    file << chunk_file.rdbuf();
+  }
+
   return true;
 }
 
