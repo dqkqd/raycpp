@@ -4,7 +4,7 @@
 
 #include "color.hpp"
 #include "interval.hpp"
-#include "utils.h"
+#include "utils.hpp"
 
 Color Color::lerp(const Color &other, double a) const {
   return (1 - a) * *this + a * other;

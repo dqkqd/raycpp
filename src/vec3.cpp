@@ -1,5 +1,5 @@
 #include "vec3.hpp"
-#include "utils.h"
+#include "utils.hpp"
 #include <cmath>
 
 Vec3 operator*(const Vec3 &v, double s) {

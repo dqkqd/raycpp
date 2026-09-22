@@ -3,7 +3,7 @@
 #include "hit.hpp"
 #include "point.hpp"
 #include "ray.hpp"
-#include "utils.h"
+#include "utils.hpp"
 #include "vec3.hpp"
 #include <cmath>
 #include <format>
