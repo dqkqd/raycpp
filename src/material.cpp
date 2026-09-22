@@ -1,5 +1,6 @@
 #include "material.hpp"
 #include "hit.hpp"
+#include "utils.hpp"
 #include "vec3.hpp"
 #include <algorithm>
 #include <cmath>
@@ -57,7 +58,7 @@ std::optional<Scatter> Dielectrics::scatter(const Ray &ray,
   }
 
   auto cannot_refract = ri * sin_theta > 1.0;
-  if (cannot_refract) {
+  if (cannot_refract || refelectance(cos_theta, ri) > random_double()) {
     auto reflected = unit_direction.reflect(rec.normal_);
     return Scatter{.scattered =
                        Ray{.origin = rec.hit_point_, .direction = reflected},

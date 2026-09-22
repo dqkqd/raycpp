@@ -14,7 +14,8 @@ int main() {
       std::make_shared<Lambertian>(Color{.r = 0.8, .g = 0.8, .b = 0});
   auto material_center =
       std::make_shared<Lambertian>(Color{.r = 0.1, .g = 0.2, .b = 0.5});
-  auto material_left = std::make_shared<Dielectrics>(1.0 / 1.33);
+  auto material_left = std::make_shared<Dielectrics>(1.50);
+  auto material_bubble = std::make_shared<Dielectrics>(1.00 / 1.50);
   auto material_right =
       std::make_shared<Metal>(Color{.r = 0.8, .g = 0.6, .b = 0.2}, 1.0);
 
@@ -24,6 +25,8 @@ int main() {
                                      material_center));
   world.add(std::make_unique<Sphere>(Point{.x = -1.0, .y = 0, .z = -1.0}, 0.5,
                                      material_left));
+  world.add(std::make_unique<Sphere>(Point{.x = -1.0, .y = 0, .z = -1.0}, 0.4,
+                                     material_bubble));
   world.add(std::make_unique<Sphere>(Point{.x = 1.0, .y = 0, .z = -1.0}, 0.5,
                                      material_right));
 

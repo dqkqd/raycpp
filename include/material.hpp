@@ -2,6 +2,7 @@
 
 #include "color.hpp"
 #include "ray.hpp"
+#include <cmath>
 #include <optional>
 
 class HitRecord;
@@ -57,4 +58,10 @@ public:
 
 private:
   double refraction_index_;
+  // Schlick's approximation
+  static double refelectance(double cosine, double refraction_index) {
+    auto r0 = (1 - refraction_index) / (1 + refraction_index);
+    r0 = r0 * r0;
+    return r0 + ((1 - r0) * std::pow(1 - cosine, 5));
+  }
 };
