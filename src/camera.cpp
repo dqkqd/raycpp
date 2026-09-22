@@ -2,12 +2,16 @@
 #include "color.hpp"
 #include "hit.hpp"
 #include "point.hpp"
+#include "progress.hpp"
 #include "ray.hpp"
 #include "utils.hpp"
 #include "vec3.hpp"
+#include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <format>
 #include <fstream>
+#include <functional>
 #include <iostream>
 #include <string>
 
@@ -60,12 +64,27 @@ Camera::Camera(int image_width, int image_height, int samples_per_pixel,
       defocus_disk_u_(defocus_disk_u), defocus_disk_v_(defocus_disk_v) {}
 
 bool Camera::render(const Hittable &world) const {
+
+  std::vector<bool> results(N_CHUNKS, false);
+  Progress progress(N_CHUNKS);
+  auto start = std::chrono::high_resolution_clock::now();
+
   for (int chunk = 0; chunk < N_CHUNKS; chunk++) {
-    if (!write_chunk(chunk, world)) {
-      return false;
-    }
+    results[chunk] = write_chunk(chunk, world, progress);
   }
-  return merge_chunks();
+
+  if (!std::ranges::all_of(results, std::identity{})) {
+    return false;
+  }
+
+  auto result = merge_chunks();
+
+  auto end = std::chrono::high_resolution_clock::now();
+  auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start);
+  std::clog << std::format("Done, in {}\n", duration);
+  std::clog.flush();
+
+  return result;
 }
 
 std::string Camera::image_chunk_name(int chunk) {
@@ -73,7 +92,8 @@ std::string Camera::image_chunk_name(int chunk) {
 }
 
 // write chunk of images
-bool Camera::write_chunk(int chunk, const Hittable &world) const {
+bool Camera::write_chunk(int chunk, const Hittable &world,
+                         Progress &progress) const {
   std::ofstream chunk_file{image_chunk_name(chunk),
                            std::ofstream::trunc | std::ofstream::out};
   if (!chunk_file.is_open()) {
@@ -87,8 +107,8 @@ bool Camera::write_chunk(int chunk, const Hittable &world) const {
       chunk == N_CHUNKS - 1 ? image_height_ : (chunk + 1) * chunk_size;
 
   for (int j = height_from; j < height_to; j++) {
-    std::clog << std::format("\rChunk: {}. Scanlines remaining: {} ", chunk,
-                             height_to - j);
+    progress.update(chunk, std::format("chunk {}: {} scanlines remaining",
+                                       chunk, height_to - j));
     for (int i = 0; i < image_width_; i++) {
       Color color = {.r = 0, .g = 0, .b = 0};
       for (int sample = 0; sample < samples_per_pixel_; sample++) {
@@ -99,6 +119,7 @@ bool Camera::write_chunk(int chunk, const Hittable &world) const {
     }
   }
 
+  progress.update(chunk, std::format("chunk {}: done", chunk));
   return true;
 }
 
