@@ -23,6 +23,7 @@
             cmake
             cmake-language-server
             feh
+            llvmPackages.openmp
           ];
         };
       }

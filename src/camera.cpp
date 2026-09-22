@@ -69,6 +69,7 @@ bool Camera::render(const Hittable &world) const {
   Progress progress(N_CHUNKS);
   auto start = std::chrono::high_resolution_clock::now();
 
+#pragma omp parallel for schedule(dynamic)
   for (int chunk = 0; chunk < N_CHUNKS; chunk++) {
     results[chunk] = write_chunk(chunk, world, progress);
   }
