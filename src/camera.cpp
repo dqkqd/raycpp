@@ -67,7 +67,7 @@ Camera::Camera(int image_width, int image_height, int samples_per_pixel,
 
 bool Camera::render(const Hittable &world) const {
 
-  std::vector<bool> results(N_CHUNKS, false);
+  std::array<bool, N_CHUNKS> results{};
   Progress progress(N_CHUNKS);
   auto start = std::chrono::high_resolution_clock::now();
 
@@ -76,7 +76,7 @@ bool Camera::render(const Hittable &world) const {
     threads.reserve(N_CHUNKS);
     for (int chunk = 0; chunk < N_CHUNKS; chunk++) {
       threads.emplace_back([&, chunk]() {
-        results[chunk] = write_chunk(chunk, world, progress);
+        results.at(chunk) = write_chunk(chunk, world, progress);
       });
     }
   }
