@@ -69,6 +69,15 @@ Vec3 Vec3::random_unit() {
   }
 }
 
+Vec3 Vec3::random_in_unit_disk() {
+  while (true) {
+    Vec3 p = {.x = random_double(-1, 1), .y = random_double(-1, 1), .z = 0};
+    if (p.length_square() <= 1) {
+      return p;
+    }
+  }
+}
+
 Vec3 Vec3::reflect(const Vec3 &normal) const {
   return *this - 2 * dot(normal) * normal;
 }

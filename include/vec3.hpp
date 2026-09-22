@@ -27,6 +27,8 @@ public:
   static Vec3 random();
   static Vec3 random(double min, double max);
   static Vec3 random_unit();
+  static Vec3 random_in_unit_disk();
+
   [[nodiscard]] Vec3 reflect(const Vec3 &normal) const;
   [[nodiscard]] Vec3 refract(const Vec3 &normal, double ri) const;
 };

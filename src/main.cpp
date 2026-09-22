@@ -6,9 +6,9 @@
 #include <memory>
 
 int main() {
-  auto cam =
-      Camera::init(16.0 / 9.0, 400, 100, 50, 20, Point{.x = -2, .y = 2, .z = 1},
-                   {.x = 0, .y = 0, .z = -1}, {.x = 0, .y = 1, .z = 0});
+  auto cam = Camera::init(
+      16.0 / 9.0, 400, 100, 50, 20, Point{.x = -2, .y = 2, .z = 1},
+      {.x = 0, .y = 0, .z = -1}, {.x = 0, .y = 1, .z = 0}, 10.0, 3.4);
 
   auto world = World();
 
