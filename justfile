@@ -1,5 +1,6 @@
 build:
     cmake -B build -DCMAKE_BUILD_TYPE=Release
+    cp build/compile_commands.json .
     cmake --build build --target raycpp
 
 format:
