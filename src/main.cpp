@@ -1,4 +1,5 @@
 #include "camera.hpp"
+#include "color.hpp"
 #include "material.hpp"
 #include "point.hpp"
 #include "sphere.hpp"
