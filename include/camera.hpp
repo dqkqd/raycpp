@@ -8,7 +8,7 @@
 class Camera {
 public:
   static Camera init(double aspect_ratio, int image_width,
-                     int samples_per_pixel, int max_depth);
+                     int samples_per_pixel, int max_depth, double vfov);
 
   [[nodiscard]] bool render(const Hittable &world) const;
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <numbers>
 #include <random>
 
 inline double random_double() {
@@ -15,3 +16,7 @@ inline double random_double(double min, double max) {
 }
 
 inline double linear_to_gammar(double l) { return l > 0 ? sqrt(l) : 0; }
+
+inline double degree_to_radian(double degree) {
+  return degree * std::numbers::pi / 180;
+}
