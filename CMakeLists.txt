@@ -22,7 +22,8 @@ set(LIB_SOURCES
     src/material.cpp
     src/aabb.cpp
     src/bvh.cpp
-    src/texture.cpp)
+    src/texture.cpp
+    src/scenes.cpp)
 
 add_executable(raycpp src/main.cpp ${LIB_SOURCES})
 
