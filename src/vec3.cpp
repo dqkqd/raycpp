@@ -64,3 +64,10 @@ Vec3 Vec3::random_unit() {
 Vec3 Vec3::reflect(const Vec3 &normal) const {
   return *this - 2 * dot(normal) * normal;
 }
+
+Vec3 Vec3::refract(const Vec3 &normal, double ri) const {
+  auto cos_theta = std::fmin(-dot(normal), 1.0);
+  auto r_perp = ri * (*this + cos_theta * normal);
+  auto r_parallel = -sqrt(fabs(1 - r_perp.length_square())) * normal;
+  return r_perp + r_parallel;
+}

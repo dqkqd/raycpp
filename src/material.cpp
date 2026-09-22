@@ -31,3 +31,25 @@ std::optional<Scatter> Metal::scatter(const Ray &ray,
                      Ray{.origin = rec.hit_point_, .direction = direction},
                  .attenuation = albedo_};
 }
+
+Dielectrics::Dielectrics(double refraction_index)
+    : refraction_index_(refraction_index) {};
+
+std::optional<Scatter> Dielectrics::scatter(const Ray &ray,
+                                            const HitRecord &rec) const {
+  double ri = 0.0;
+  switch (rec.direction_) {
+  case HitRecord::Direction::Inward:
+    // ray is inside the object
+    ri = refraction_index_;
+    break;
+  case HitRecord::Direction::Outward:
+    ri = 1.0 / refraction_index_;
+    break;
+  }
+
+  auto direction = ray.direction.unit().refract(rec.normal_, ri);
+  return Scatter{.scattered =
+                     Ray{.origin = rec.hit_point_, .direction = direction},
+                 .attenuation = Color{.r = 1, .g = 1, .b = 1}};
+}

@@ -47,3 +47,14 @@ private:
   Color albedo_;
   double fuzz_;
 };
+
+class Dielectrics : public Material {
+public:
+  explicit Dielectrics(double refraction_index);
+
+  [[nodiscard]] std::optional<Scatter>
+  scatter(const Ray &ray, const HitRecord &rec) const override;
+
+private:
+  double refraction_index_;
+};
