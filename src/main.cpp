@@ -4,6 +4,7 @@
 #include "material.hpp"
 #include "point.hpp"
 #include "sphere.hpp"
+#include "texture.hpp"
 #include "utils.hpp"
 #include "vec3.hpp"
 #include "world.hpp"
@@ -16,8 +17,10 @@ int main() {
 
   auto world = World();
 
-  auto material_ground =
-      std::make_shared<Lambertian>(Color{.r = 0.5, .g = 0.5, .b = 0.5});
+  auto checker = std::make_shared<CheckerTexture>(
+      0.32, Color{.r = .2, .g = .3, .b = .1}, Color{.r = .9, .g = .9, .b = .9});
+
+  auto material_ground = std::make_shared<Lambertian>(checker);
   world.add(std::make_unique<Sphere>(Point{.x = 0, .y = -1000, .z = 0}, 1000,
                                      material_ground));
 

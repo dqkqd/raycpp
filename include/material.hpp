@@ -2,7 +2,9 @@
 
 #include "color.hpp"
 #include "ray.hpp"
+#include "texture.hpp"
 #include <cmath>
+#include <memory>
 #include <optional>
 
 class HitRecord;
@@ -28,13 +30,14 @@ public:
 
 class Lambertian : public Material {
 public:
-  explicit Lambertian(Color albedo);
+  explicit Lambertian(const Color &color);
+  explicit Lambertian(std::shared_ptr<Texture> tex);
 
   [[nodiscard]] std::optional<Scatter>
   scatter(const Ray &ray, const HitRecord &rec) const override;
 
 private:
-  Color albedo_;
+  std::shared_ptr<Texture> tex_;
 };
 
 class Metal : public Material {

@@ -5,6 +5,7 @@
 #include "interval.hpp"
 #include "material.hpp"
 #include "point.hpp"
+#include "texture.hpp"
 #include <memory>
 #include <optional>
 
@@ -18,6 +19,8 @@ public:
                                              Interval interval) const override;
 
   [[nodiscard]] AABB bounding_box() const override;
+
+  static TextureCoordinate texture_coordinate(const Point &p);
 
 private:
   Ray center_;

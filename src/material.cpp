@@ -2,13 +2,18 @@
 #include "color.hpp"
 #include "hit.hpp"
 #include "ray.hpp"
+#include "texture.hpp"
 #include "utils.hpp"
 #include "vec3.hpp"
 #include <algorithm>
 #include <cmath>
+#include <memory>
 #include <optional>
+#include <utility>
 
-Lambertian::Lambertian(Color albedo) : albedo_(albedo) {};
+Lambertian::Lambertian(const Color &color)
+    : tex_(std::make_shared<SolidColor>(color)) {};
+Lambertian::Lambertian(std::shared_ptr<Texture> tex) : tex_(std::move(tex)) {};
 
 std::optional<Scatter> Lambertian::scatter(const Ray &ray,
                                            const HitRecord &rec) const {
@@ -17,7 +22,8 @@ std::optional<Scatter> Lambertian::scatter(const Ray &ray,
     direction = rec.normal_;
   }
   auto scattered = Ray{rec.hit_point_, direction, ray.time_};
-  return Scatter{.scattered = scattered, .attenuation = albedo_};
+  return Scatter{.scattered = scattered,
+                 .attenuation = tex_->value(rec.coord_, rec.hit_point_)};
 }
 
 Metal::Metal(Color albedo, double fuzz)

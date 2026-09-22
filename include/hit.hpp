@@ -5,6 +5,7 @@
 #include "material.hpp"
 #include "point.hpp"
 #include "ray.hpp"
+#include "texture.hpp"
 #include "vec3.hpp"
 #include <cstdint>
 #include <memory>
@@ -21,8 +22,10 @@ public:
   double distance_;
   std::shared_ptr<Material> material_;
 
+  TextureCoordinate coord_;
+
   HitRecord(Point hit_point, Direction direction, Vec3 normal, double distance,
-            std::shared_ptr<Material> material);
+            std::shared_ptr<Material> material, TextureCoordinate tex_coord);
 };
 
 class Hittable {

@@ -5,9 +5,11 @@
 #include "material.hpp"
 #include "point.hpp"
 #include "ray.hpp"
+#include "texture.hpp"
 #include "vec3.hpp"
 #include <cmath>
 #include <memory>
+#include <numbers>
 #include <optional>
 #include <utility>
 
@@ -26,6 +28,14 @@ Sphere::Sphere(Point center, double radius, std::shared_ptr<Material> material)
       material_(std::move(material)),
       bbox(center - Vec3{.x = radius, .y = radius, .z = radius},
            center + Vec3{.x = radius, .y = radius, .z = radius}) {}
+
+TextureCoordinate Sphere::texture_coordinate(const Point &p) {
+  auto theta = std::acos(-p.y);
+  auto phi = std::atan2(-p.z, p.x) + std::numbers::pi;
+
+  return TextureCoordinate{.u = phi / (2 * std::numbers::pi),
+                           .v = theta / std::numbers::pi};
+}
 
 std::optional<HitRecord> Sphere::hit(const Ray &ray, Interval interval) const {
   auto current_center = center_.at(ray.time_);
@@ -51,12 +61,14 @@ std::optional<HitRecord> Sphere::hit(const Ray &ray, Interval interval) const {
   auto hit_point = ray.at(distance);
   auto normal = (hit_point - current_center) / radius_;
 
+  auto coord = texture_coordinate(hit_point);
+
   if (normal.dot(ray.direction_) > 0) {
     return HitRecord(hit_point, HitRecord::Direction::Inward, -normal, distance,
-                     material_);
+                     material_, coord);
   }
   return HitRecord(hit_point, HitRecord::Direction::Outward, normal, distance,
-                   material_);
+                   material_, coord);
 }
 
 AABB Sphere::bounding_box() const { return bbox; }
