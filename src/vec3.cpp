@@ -36,9 +36,15 @@ Vec3 Vec3::random() {
   return {.x = random_double(), .y = random_double(), .z = random_double()};
 }
 
+Vec3 Vec3::random(double min, double max) {
+  return {.x = random_double(min, max),
+          .y = random_double(min, max),
+          .z = random_double(min, max)};
+}
+
 Vec3 Vec3::random_unit() {
   while (true) {
-    auto vec = random();
+    auto vec = random(-1, 1);
     auto lensq = vec.length_square();
     if (1e-160 < lensq && lensq <= 1) {
       return vec / sqrt(lensq);

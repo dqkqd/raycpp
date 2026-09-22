@@ -22,6 +22,7 @@ public:
   [[nodiscard]] Vec3 unit() const;
 
   static Vec3 random();
+  static Vec3 random(double min, double max);
   static Vec3 random_unit();
   static Vec3 random_on_hemisphere(const Vec3 &normal);
 };
