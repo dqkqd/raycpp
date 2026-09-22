@@ -1,5 +1,7 @@
 #include "material.hpp"
+#include "color.hpp"
 #include "hit.hpp"
+#include "ray.hpp"
 #include "utils.hpp"
 #include "vec3.hpp"
 #include <algorithm>

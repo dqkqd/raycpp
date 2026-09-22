@@ -15,6 +15,7 @@
 #include <iostream>
 #include <string>
 #include <thread>
+#include <vector>
 
 Camera Camera::init(double aspect_ratio, int image_width, int samples_per_pixel,
                     int max_depth, double vfov, Point lookfrom, Point lookat,

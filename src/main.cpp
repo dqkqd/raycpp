@@ -23,9 +23,9 @@ int main() {
   for (int a = -11; a < 11; a++) {
     for (int b = -11; b < 11; b++) {
       auto choose_mat = random_double();
-      Point center{.x = a + (0.9 * random_double()),
-                   .y = 0.2,
-                   .z = b + (0.9 * random_double())};
+      const Point center{.x = a + (0.9 * random_double()),
+                         .y = 0.2,
+                         .z = b + (0.9 * random_double())};
       if ((center - Point{.x = 4, .y = 0.2, .z = 0}).length() > 0.9) {
         if (choose_mat < 0.8) {
           auto albedo = Vec3::random() * Vec3::random();
