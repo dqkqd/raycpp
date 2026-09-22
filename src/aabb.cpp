@@ -6,21 +6,18 @@
 AABB::AABB(const Interval &x, const Interval &y, const Interval &z)
     : x(x), y(y), z(z) {}
 AABB::AABB(const Point &a, const Point &b)
-    : x(a.x <= b.x ? Interval{.tmin = a.x, .tmax = b.x}
-                   : Interval{.tmin = b.x, .tmax = a.x}),
-      y(a.y <= b.y ? Interval{.tmin = a.y, .tmax = b.y}
-                   : Interval{.tmin = b.y, .tmax = a.y}),
-      z(a.z <= b.z ? Interval{.tmin = a.z, .tmax = b.z}
-                   : Interval{.tmin = b.z, .tmax = a.z}) {}
+    : x(a.x <= b.x ? Interval{a.x, b.x} : Interval{b.x, a.x}),
+      y(a.y <= b.y ? Interval{a.y, b.y} : Interval{b.y, a.y}),
+      z(a.z <= b.z ? Interval{a.z, b.z} : Interval{b.z, a.z}) {}
 
 std::optional<Interval> AABB::hit(const Ray &ray, const Interval &ray_t) const {
-  auto tmin = ray_t.tmin;
-  auto tmax = ray_t.tmax;
+  auto tmin = ray_t.min;
+  auto tmax = ray_t.max;
 
   auto slab_assign = [&](const Interval &slab, double origin,
                          double direction) {
-    auto t0 = (slab.tmin - origin) / direction;
-    auto t1 = (slab.tmax - origin) / direction;
+    auto t0 = (slab.min - origin) / direction;
+    auto t1 = (slab.max - origin) / direction;
     auto p = std::minmax(t0, t1);
     tmin = std::max(tmin, p.first);
     tmax = std::min(tmax, p.second);
@@ -34,7 +31,7 @@ std::optional<Interval> AABB::hit(const Ray &ray, const Interval &ray_t) const {
     return {};
   }
 
-  return Interval{.tmin = tmin, .tmax = tmax};
+  return Interval{tmin, tmax};
 }
 
 AABB AABB::merge(const AABB &other) const {

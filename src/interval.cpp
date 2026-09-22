@@ -2,31 +2,30 @@
 #include <algorithm>
 #include <limits>
 
-bool Interval::surround(double x) const { return tmin < x && x < tmax; }
+Interval::Interval(double tmin, double tmax) : min(tmin), max(tmax) {}
+
+bool Interval::surround(double x) const { return min < x && x < max; }
 
 double Interval::clamp(double x) const {
-  if (x < tmin) {
-    return tmin;
+  if (x < min) {
+    return min;
   }
-  if (x > tmax) {
-    return tmax;
+  if (x > max) {
+    return max;
   }
   return x;
 }
 
 Interval Interval::expand(double delta) const {
   auto padding = delta / 2;
-  return {.tmin = tmin - padding, .tmax = tmax + padding};
+  return {min - padding, max + padding};
 }
 
 Interval Interval::merge(const Interval &other) const {
-  return {
-      .tmin = std::min(tmin, other.tmin),
-      .tmax = std::max(tmax, other.tmax),
-  };
+  return {std::min(min, other.min), std::max(max, other.max)};
 }
 
 Interval Interval::empty() {
-  return {.tmin = std::numeric_limits<double>::infinity(),
-          .tmax = -std::numeric_limits<double>::infinity()};
+  return {std::numeric_limits<double>::infinity(),
+          -std::numeric_limits<double>::infinity()};
 }

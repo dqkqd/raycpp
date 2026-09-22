@@ -30,7 +30,7 @@ std::optional<HitRecord> World::hit(const Ray &ray, Interval interval) const {
     auto rec = object->hit(ray, interval);
     if (rec.has_value()) {
       best = rec;
-      interval.tmax = best->distance_;
+      interval.max = best->distance_;
     }
   }
   return best;

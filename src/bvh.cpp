@@ -53,7 +53,7 @@ std::optional<HitRecord> BvhNode::hit(const Ray &ray, Interval interval) const {
   if (left) {
     auto temp_rec = left->hit(ray, interval);
     if (temp_rec.has_value()) {
-      interval.tmax = temp_rec->distance_;
+      interval.max = temp_rec->distance_;
       rec = temp_rec;
     }
   }
@@ -61,7 +61,7 @@ std::optional<HitRecord> BvhNode::hit(const Ray &ray, Interval interval) const {
   if (right) {
     auto temp_rec = right->hit(ray, interval);
     if (temp_rec.has_value()) {
-      interval.tmax = temp_rec->distance_;
+      interval.max = temp_rec->distance_;
       rec = temp_rec;
     }
   }

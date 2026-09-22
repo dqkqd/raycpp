@@ -170,7 +170,7 @@ Color Camera::ray_color(const Ray &ray, const Hittable &world, int depth) {
   if (depth <= 0) {
     return black;
   }
-  auto rec = world.hit(ray, {.tmin = 0.001, .tmax = INFINITY});
+  auto rec = world.hit(ray, {0.001, INFINITY});
   if (rec.has_value()) {
     auto scatter = rec->material_->scatter(ray, *rec);
     if (scatter.has_value()) {

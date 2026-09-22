@@ -12,15 +12,15 @@ HitRecord::HitRecord(Point hit_point, Direction direction, Vec3 normal,
 
 bool Hittable::box_x_compare(const std::unique_ptr<Hittable> &lhs,
                              const std::unique_ptr<Hittable> &rhs) {
-  return lhs->bounding_box().x.tmin < rhs->bounding_box().x.tmin;
+  return lhs->bounding_box().x.min < rhs->bounding_box().x.min;
 }
 
 bool Hittable::box_y_compare(const std::unique_ptr<Hittable> &lhs,
                              const std::unique_ptr<Hittable> &rhs) {
-  return lhs->bounding_box().y.tmin < rhs->bounding_box().y.tmin;
+  return lhs->bounding_box().y.min < rhs->bounding_box().y.min;
 }
 
 bool Hittable::box_z_compare(const std::unique_ptr<Hittable> &lhs,
                              const std::unique_ptr<Hittable> &rhs) {
-  return lhs->bounding_box().z.tmin < rhs->bounding_box().z.tmin;
+  return lhs->bounding_box().z.min < rhs->bounding_box().z.min;
 }

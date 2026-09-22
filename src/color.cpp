@@ -32,7 +32,7 @@ Color &Color::operator+=(const Color &other) {
 }
 
 PrintableColor Color::printable() const {
-  static const Interval intensity{.tmin = 0.000, .tmax = 0.999};
+  static const Interval intensity{0.000, 0.999};
   auto ir = static_cast<uint8_t>(256 * intensity.clamp(linear_to_gammar(r)));
   auto ig = static_cast<uint8_t>(256 * intensity.clamp(linear_to_gammar(g)));
   auto ib = static_cast<uint8_t>(256 * intensity.clamp(linear_to_gammar(b)));

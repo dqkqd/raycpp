@@ -2,7 +2,9 @@
 
 class Interval {
 public:
-  double tmin, tmax;
+  double min, max;
+
+  Interval(double tmin, double tmax);
 
   [[nodiscard]] bool surround(double x) const;
   [[nodiscard]] double clamp(double x) const;
