@@ -70,3 +70,26 @@ int bouncing_spheres() {
 
   return 0;
 }
+
+int checker_spheres() {
+  auto cam = Camera::init(
+      16.0 / 9.0, 400, 100, 50, 20, Point{.x = 13, .y = 2, .z = 3},
+      {.x = 0, .y = 0, .z = 0}, {.x = 0, .y = 1, .z = 0}, 0.6, 10.0);
+
+  auto world = World();
+
+  auto checker = std::make_shared<CheckerTexture>(
+      0.32, Color{.r = .2, .g = .3, .b = .1}, Color{.r = .9, .g = .9, .b = .9});
+
+  world.add(std::make_unique<Sphere>(Point{.x = 0, .y = -10, .z = 0}, 10,
+                                     std::make_shared<Lambertian>(checker)));
+  world.add(std::make_unique<Sphere>(Point{.x = 0, .y = 10, .z = 0}, 10,
+                                     std::make_shared<Lambertian>(checker)));
+
+  auto world_tree = BvhNode(std::move(world));
+  if (!cam.render(world_tree)) {
+    return 1;
+  }
+
+  return 0;
+}
