@@ -1,3 +1,4 @@
+#include "bvh.hpp"
 #include "camera.hpp"
 #include "color.hpp"
 #include "material.hpp"
@@ -57,7 +58,8 @@ int main() {
   auto mat3 = std::make_shared<Metal>(Color{.r = 0.7, .g = 0.6, .b = 0.5}, 0);
   world.add(std::make_unique<Sphere>(Point{.x = 4, .y = 1, .z = 0}, 1, mat3));
 
-  if (!cam.render(world)) {
+  auto world_tree = BvhNode(std::move(world));
+  if (!cam.render(world_tree)) {
     return 1;
   }
 

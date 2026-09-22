@@ -1,4 +1,5 @@
 #include "world.hpp"
+#include "aabb.hpp"
 #include "hit.hpp"
 #include "interval.hpp"
 #include "ray.hpp"
@@ -6,7 +7,18 @@
 #include <optional>
 #include <utility>
 
+World::World(World &&w) noexcept
+    : objects(std::move(w.objects)), bbox(w.bbox) {}
+
+World &World::operator=(World &&w) noexcept {
+  if (this != &w) {
+    objects = std::move(w.objects);
+  }
+  return *this;
+}
+
 void World::add(std::unique_ptr<Hittable> &&object) {
+  bbox = bbox.merge(object->bounding_box());
   objects.push_back(std::move(object));
 }
 
@@ -23,3 +35,5 @@ std::optional<HitRecord> World::hit(const Ray &ray, Interval interval) const {
   }
   return best;
 }
+
+AABB World::bounding_box() const { return bbox; }

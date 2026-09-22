@@ -13,11 +13,12 @@
 Sphere::Sphere(Point center1, Point center2, double radius,
                std::shared_ptr<Material> material)
     : center_{center1, center2 - center1}, radius_(radius),
-      material_(std::move(material)) {};
+      material_(std::move(material)),
+      bbox{center1 - Vec3{.x = radius, .y = radius, .z = radius},
+           center2 + Vec3{.x = radius, .y = radius, .z = radius}} {};
 
 Sphere::Sphere(Point center, double radius, std::shared_ptr<Material> material)
-    : center_{center, {.x = 0, .y = 0, .z = 0}}, radius_(radius),
-      material_(std::move(material)) {};
+    : Sphere(center, center, radius, std::move(material)) {}
 
 std::optional<HitRecord> Sphere::hit(const Ray &ray, Interval interval) const {
   auto current_center = center_.at(ray.time_);
@@ -50,3 +51,5 @@ std::optional<HitRecord> Sphere::hit(const Ray &ray, Interval interval) const {
   return HitRecord(hit_point, HitRecord::Direction::Outward, normal, distance,
                    material_);
 }
+
+AABB Sphere::bounding_box() const { return bbox; }

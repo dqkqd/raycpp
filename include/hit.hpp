@@ -1,5 +1,6 @@
 #pragma once
 
+#include "aabb.hpp"
 #include "interval.hpp"
 #include "material.hpp"
 #include "point.hpp"
@@ -35,4 +36,13 @@ public:
   virtual ~Hittable() = default;
   [[nodiscard]] virtual std::optional<HitRecord>
   hit(const Ray &ray, Interval interval) const = 0;
+
+  [[nodiscard]] virtual AABB bounding_box() const = 0;
+
+  static bool box_x_compare(const std::unique_ptr<Hittable> &lhs,
+                            const std::unique_ptr<Hittable> &rhs);
+  static bool box_y_compare(const std::unique_ptr<Hittable> &lhs,
+                            const std::unique_ptr<Hittable> &rhs);
+  static bool box_z_compare(const std::unique_ptr<Hittable> &lhs,
+                            const std::unique_ptr<Hittable> &rhs);
 };

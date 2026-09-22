@@ -1,5 +1,6 @@
 #pragma once
 
+#include "aabb.hpp"
 #include "hit.hpp"
 #include "interval.hpp"
 #include "material.hpp"
@@ -16,8 +17,12 @@ public:
   [[nodiscard]] std::optional<HitRecord> hit(const Ray &ray,
                                              Interval interval) const override;
 
+  [[nodiscard]] AABB bounding_box() const override;
+
 private:
   Ray center_;
   double radius_;
   std::shared_ptr<Material> material_;
+
+  AABB bbox;
 };

@@ -19,7 +19,9 @@ set(LIB_SOURCES
     src/interval.cpp
     src/camera.cpp
     src/progress.cpp
-    src/material.cpp)
+    src/material.cpp
+    src/aabb.cpp
+    src/bvh.cpp)
 
 add_executable(raycpp src/main.cpp ${LIB_SOURCES})
 
