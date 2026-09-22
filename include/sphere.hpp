@@ -6,6 +6,7 @@
 #include "material.hpp"
 #include "point.hpp"
 #include "texture.hpp"
+#include "vec3.hpp"
 #include <memory>
 #include <optional>
 
@@ -20,7 +21,7 @@ public:
 
   [[nodiscard]] AABB bounding_box() const override;
 
-  static TextureCoordinate texture_coordinate(const Point &p);
+  static TextureCoordinate texture_coordinate(const Vec3 &p);
 
 private:
   Ray center_;

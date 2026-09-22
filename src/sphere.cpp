@@ -29,7 +29,7 @@ Sphere::Sphere(Point center, double radius, std::shared_ptr<Material> material)
       bbox(center - Vec3{.x = radius, .y = radius, .z = radius},
            center + Vec3{.x = radius, .y = radius, .z = radius}) {}
 
-TextureCoordinate Sphere::texture_coordinate(const Point &p) {
+TextureCoordinate Sphere::texture_coordinate(const Vec3 &p) {
   auto theta = std::acos(-p.y);
   auto phi = std::atan2(-p.z, p.x) + std::numbers::pi;
 
@@ -61,7 +61,7 @@ std::optional<HitRecord> Sphere::hit(const Ray &ray, Interval interval) const {
   auto hit_point = ray.at(distance);
   auto normal = (hit_point - current_center) / radius_;
 
-  auto coord = texture_coordinate(hit_point);
+  auto coord = texture_coordinate(normal);
 
   if (normal.dot(ray.direction_) > 0) {
     return HitRecord(hit_point, HitRecord::Direction::Inward, -normal, distance,
