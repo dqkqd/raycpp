@@ -21,3 +21,5 @@ Interval Interval::expand(double delta) const {
 Interval Interval::merge(const Interval &other) const {
   return {std::min(min, other.min), std::max(max, other.max)};
 }
+
+double Interval::size() const { return max - min; }

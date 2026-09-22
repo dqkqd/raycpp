@@ -3,7 +3,6 @@
 #include "hit.hpp"
 #include "interval.hpp"
 #include "ray.hpp"
-#include "utils.hpp"
 #include "world.hpp"
 #include <algorithm>
 #include <iterator>
@@ -14,18 +13,24 @@
 
 BvhNode::BvhNode(World &&world) : BvhNode(std::move(world).objects) {}
 
-BvhNode::BvhNode(std::vector<std::unique_ptr<Hittable>> objects) {
+BvhNode::BvhNode(std::vector<std::unique_ptr<Hittable>> objects)
+    : bbox(AABB::empty) {
+
+  for (const auto &object : objects) {
+    bbox = bbox.merge(object->bounding_box());
+  }
+
   if (objects.size() == 1) {
     left = std::move(objects[0]);
   } else if (objects.size() == 2) {
     left = std::move(objects[0]);
     right = std::move(objects[1]);
   } else {
-    auto axis = random_int(0, 2);
+    auto axis = bbox.longest_axis();
     auto comparator = box_x_compare;
-    if (axis == 1) {
+    if (axis == AABB::Axis::Y) {
       comparator = box_y_compare;
-    } else if (axis == 2) {
+    } else if (axis == AABB::Axis::Z) {
       comparator = box_z_compare;
     }
     std::ranges::sort(objects, comparator);
@@ -39,10 +44,6 @@ BvhNode::BvhNode(std::vector<std::unique_ptr<Hittable>> objects) {
     left = std::make_unique<BvhNode>(std::move(left_objects));
     right = std::make_unique<BvhNode>(std::move(right_objects));
   }
-
-  auto lbbox = left ? left->bounding_box() : AABB::empty;
-  auto rbbox = right ? right->bounding_box() : AABB::empty;
-  bbox = lbbox.merge(rbbox);
 }
 
 AABB BvhNode::bounding_box() const { return bbox; }

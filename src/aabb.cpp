@@ -37,3 +37,10 @@ std::optional<Interval> AABB::hit(const Ray &ray, const Interval &ray_t) const {
 AABB AABB::merge(const AABB &other) const {
   return {x.merge(other.x), y.merge(other.y), z.merge(other.z)};
 }
+
+AABB::Axis AABB::longest_axis() const {
+  if (x.size() > y.size()) {
+    return x.size() > z.size() ? AABB::Axis::X : AABB::Axis::Z;
+  }
+  return y.size() > z.size() ? AABB::Axis::Y : AABB::Axis::Z;
+}
