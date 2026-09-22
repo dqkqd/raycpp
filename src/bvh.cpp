@@ -4,9 +4,13 @@
 #include "interval.hpp"
 #include "ray.hpp"
 #include "utils.hpp"
+#include "world.hpp"
 #include <algorithm>
 #include <iterator>
 #include <memory>
+#include <optional>
+#include <utility>
+#include <vector>
 
 BvhNode::BvhNode(World &&world) : BvhNode(std::move(world).objects) {}
 

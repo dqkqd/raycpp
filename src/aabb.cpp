@@ -1,10 +1,12 @@
 #include "aabb.hpp"
 #include "interval.hpp"
+#include "point.hpp"
+#include "ray.hpp"
 #include <algorithm>
 #include <optional>
 
-AABB::AABB(const Interval &x, const Interval &y, const Interval &z)
-    : x(x), y(y), z(z) {}
+AABB::AABB(const Interval &xi, const Interval &yi, const Interval &zi)
+    : x(xi), y(yi), z(zi) {}
 AABB::AABB(const Point &a, const Point &b)
     : x(a.x <= b.x ? Interval{a.x, b.x} : Interval{b.x, a.x}),
       y(a.y <= b.y ? Interval{a.y, b.y} : Interval{b.y, a.y}),

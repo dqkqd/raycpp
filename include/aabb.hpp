@@ -8,7 +8,7 @@ class AABB {
 public:
   Interval x, y, z;
 
-  AABB(const Interval &x, const Interval &y, const Interval &z);
+  AABB(const Interval &xi, const Interval &yi, const Interval &zi);
   AABB(const Point &a, const Point &b);
 
   [[nodiscard]] std::optional<Interval> hit(const Ray &ray,
