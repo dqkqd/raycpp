@@ -18,9 +18,9 @@ Vec3 Sphere::outward_normal(const Point &at) const {
 }
 
 std::optional<HitRecord> Sphere::hit(const Ray &ray, Interval interval) const {
-  auto oc = center_ - ray.origin;
-  auto a = ray.direction.dot(ray.direction);
-  auto b = ray.direction.dot(oc);
+  auto oc = center_ - ray.origin_;
+  auto a = ray.direction_.dot(ray.direction_);
+  auto b = ray.direction_.dot(oc);
   auto c = oc.dot(oc) - (radius_ * radius_);
   auto delta = (b * b) - (a * c);
   if (delta < 0) {
@@ -40,7 +40,7 @@ std::optional<HitRecord> Sphere::hit(const Ray &ray, Interval interval) const {
   auto hit_point = ray.at(distance);
   auto normal = outward_normal(hit_point);
 
-  if (normal.dot(ray.direction) > 0) {
+  if (normal.dot(ray.direction_) > 0) {
     return HitRecord(hit_point, HitRecord::Direction::Inward, -normal, distance,
                      material_);
   }

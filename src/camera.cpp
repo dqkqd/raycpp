@@ -162,7 +162,7 @@ Ray Camera::sample_ray(int i, int j) const {
                       (j + offsety) * pixel_delta_v_;
   auto ray_origin = defocus_angle_ <= 0 ? center_ : defocus_disk_sample();
 
-  return {.origin = ray_origin, .direction = pixel_sample - ray_origin};
+  return {ray_origin, pixel_sample - ray_origin};
 }
 
 Color Camera::ray_color(const Ray &ray, const Hittable &world, int depth) {
@@ -183,7 +183,7 @@ Color Camera::ray_color(const Ray &ray, const Hittable &world, int depth) {
 }
 
 Color Camera::background_color(const Ray &ray) {
-  auto unit = ray.direction.unit();
+  auto unit = ray.direction_.unit();
   auto a = 0.5 * (unit.y + 1.0);
   static const Color c1 = {.r = 1, .g = 1, .b = 1};
   static const Color c2 = {.r = 0.5, .g = 0.7, .b = 1};

@@ -16,8 +16,7 @@ std::optional<Scatter> Lambertian::scatter(const Ray & /*ray*/,
   if (direction.near_zero()) {
     direction = rec.normal_;
   }
-  return Scatter{.scattered =
-                     Ray{.origin = rec.hit_point_, .direction = direction},
+  return Scatter{.scattered = Ray{rec.hit_point_, direction},
                  .attenuation = albedo_};
 }
 
@@ -26,13 +25,12 @@ Metal::Metal(Color albedo, double fuzz)
 
 std::optional<Scatter> Metal::scatter(const Ray &ray,
                                       const HitRecord &rec) const {
-  auto direction = ray.direction.reflect(rec.normal_);
+  auto direction = ray.direction_.reflect(rec.normal_);
   direction = direction.unit() + fuzz_ * Vec3::random_unit();
   if (direction.dot(rec.normal_) <= 0) {
     return {};
   }
-  return Scatter{.scattered =
-                     Ray{.origin = rec.hit_point_, .direction = direction},
+  return Scatter{.scattered = Ray{rec.hit_point_, direction},
                  .attenuation = albedo_};
 }
 
@@ -44,7 +42,7 @@ std::optional<Scatter> Dielectrics::scatter(const Ray &ray,
 
   static const auto attenuation = Color{.r = 1, .g = 1, .b = 1};
 
-  auto unit_direction = ray.direction.unit();
+  auto unit_direction = ray.direction_.unit();
   auto cos_theta = std::fmin(-unit_direction.dot(rec.normal_), 1.0);
   auto sin_theta = sqrt(1 - (cos_theta * cos_theta));
 
@@ -62,13 +60,11 @@ std::optional<Scatter> Dielectrics::scatter(const Ray &ray,
   auto cannot_refract = ri * sin_theta > 1.0;
   if (cannot_refract || refelectance(cos_theta, ri) > random_double()) {
     auto reflected = unit_direction.reflect(rec.normal_);
-    return Scatter{.scattered =
-                       Ray{.origin = rec.hit_point_, .direction = reflected},
+    return Scatter{.scattered = Ray{rec.hit_point_, reflected},
                    .attenuation = attenuation};
   }
 
   auto refracted = unit_direction.refract(rec.normal_, ri);
-  return Scatter{.scattered =
-                     Ray{.origin = rec.hit_point_, .direction = refracted},
+  return Scatter{.scattered = Ray{rec.hit_point_, refracted},
                  .attenuation = attenuation};
 }
