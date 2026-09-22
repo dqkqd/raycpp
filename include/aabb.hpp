@@ -8,7 +8,10 @@ class AABB {
 public:
   Interval x, y, z;
 
-  AABB(const Interval &xi, const Interval &yi, const Interval &zi);
+  constexpr AABB(const Interval &xi, const Interval &yi,
+                 const Interval &zi) noexcept
+      : x(xi), y(yi), z(zi) {}
+
   AABB(const Point &a, const Point &b);
 
   [[nodiscard]] std::optional<Interval> hit(const Ray &ray,
@@ -16,5 +19,8 @@ public:
 
   [[nodiscard]] AABB merge(const AABB &other) const;
 
-  static AABB empty();
+  static const AABB empty;
 };
+
+inline constexpr AABB AABB::empty{Interval::empty, Interval::empty,
+                                  Interval::empty};

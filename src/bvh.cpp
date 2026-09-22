@@ -40,8 +40,8 @@ BvhNode::BvhNode(std::vector<std::unique_ptr<Hittable>> objects) {
     right = std::make_unique<BvhNode>(std::move(right_objects));
   }
 
-  auto lbbox = left ? left->bounding_box() : AABB::empty();
-  auto rbbox = right ? right->bounding_box() : AABB::empty();
+  auto lbbox = left ? left->bounding_box() : AABB::empty;
+  auto rbbox = right ? right->bounding_box() : AABB::empty;
   bbox = lbbox.merge(rbbox);
 }
 

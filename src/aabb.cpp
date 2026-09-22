@@ -5,8 +5,6 @@
 #include <algorithm>
 #include <optional>
 
-AABB::AABB(const Interval &xi, const Interval &yi, const Interval &zi)
-    : x(xi), y(yi), z(zi) {}
 AABB::AABB(const Point &a, const Point &b)
     : x(a.x <= b.x ? Interval{a.x, b.x} : Interval{b.x, a.x}),
       y(a.y <= b.y ? Interval{a.y, b.y} : Interval{b.y, a.y}),
@@ -38,8 +36,4 @@ std::optional<Interval> AABB::hit(const Ray &ray, const Interval &ray_t) const {
 
 AABB AABB::merge(const AABB &other) const {
   return {x.merge(other.x), y.merge(other.y), z.merge(other.z)};
-}
-
-AABB AABB::empty() {
-  return {Interval::empty(), Interval::empty(), Interval::empty()};
 }

@@ -21,5 +21,5 @@ private:
   std::unique_ptr<Hittable> left;
   std::unique_ptr<Hittable> right;
 
-  AABB bbox = AABB::empty();
+  AABB bbox = AABB::empty;
 };

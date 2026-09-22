@@ -1,10 +1,13 @@
 #pragma once
 
+#include <limits>
+
 class Interval {
 public:
   double min, max;
 
-  Interval(double tmin, double tmax);
+  constexpr Interval(double tmin, double tmax) noexcept
+      : min(tmin), max(tmax) {}
 
   [[nodiscard]] bool surround(double x) const;
   [[nodiscard]] double clamp(double x) const;
@@ -12,5 +15,9 @@ public:
 
   [[nodiscard]] Interval merge(const Interval &other) const;
 
-  static Interval empty();
+  static const Interval empty;
 };
+
+inline constexpr Interval Interval::empty{
+    std::numeric_limits<double>::infinity(),
+    -std::numeric_limits<double>::infinity()};

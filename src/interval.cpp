@@ -1,8 +1,5 @@
 #include "interval.hpp"
 #include <algorithm>
-#include <limits>
-
-Interval::Interval(double tmin, double tmax) : min(tmin), max(tmax) {}
 
 bool Interval::surround(double x) const { return min < x && x < max; }
 
@@ -23,9 +20,4 @@ Interval Interval::expand(double delta) const {
 
 Interval Interval::merge(const Interval &other) const {
   return {std::min(min, other.min), std::max(max, other.max)};
-}
-
-Interval Interval::empty() {
-  return {std::numeric_limits<double>::infinity(),
-          -std::numeric_limits<double>::infinity()};
 }
