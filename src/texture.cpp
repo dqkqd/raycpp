@@ -1,4 +1,6 @@
 #include "texture.hpp"
+#include "color.hpp"
+#include "point.hpp"
 #include <memory>
 #include <utility>
 

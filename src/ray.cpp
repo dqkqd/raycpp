@@ -1,5 +1,6 @@
 #include "ray.hpp"
 #include "point.hpp"
+#include "vec3.hpp"
 
 Ray::Ray(Point origin, Vec3 direction, double time)
     : origin_(origin), direction_(direction), time_(time) {}

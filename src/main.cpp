@@ -9,6 +9,7 @@
 #include "vec3.hpp"
 #include "world.hpp"
 #include <memory>
+#include <utility>
 
 int main() {
   auto cam = Camera::init(

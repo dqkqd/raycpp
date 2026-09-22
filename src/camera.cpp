@@ -7,6 +7,7 @@
 #include "utils.hpp"
 #include "vec3.hpp"
 #include <algorithm>
+#include <array>
 #include <chrono>
 #include <cmath>
 #include <format>
