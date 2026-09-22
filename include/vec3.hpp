@@ -17,6 +17,7 @@ public:
   friend bool operator==(const Vec3 &lhs, const Vec3 &rhs);
 
   [[nodiscard]] double dot(const Vec3 &other) const;
+  [[nodiscard]] Vec3 cross(const Vec3 &other) const;
   [[nodiscard]] bool near_zero() const;
 
   [[nodiscard]] double length_square() const;
