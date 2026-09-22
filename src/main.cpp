@@ -10,7 +10,7 @@
 
 int main() {
   auto cam = Camera::init(
-      16.0 / 9.0, 600, 100, 50, 20, Point{.x = 13, .y = 2, .z = 3},
+      16.0 / 9.0, 400, 100, 50, 20, Point{.x = 13, .y = 2, .z = 3},
       {.x = 0, .y = 0, .z = 0}, {.x = 0, .y = 1, .z = 0}, 0.6, 10.0);
 
   auto world = World();
@@ -31,7 +31,9 @@ int main() {
           auto albedo = Vec3::random() * Vec3::random();
           auto mat = std::make_shared<Lambertian>(
               Color{.r = albedo.x, .g = albedo.y, .b = albedo.z});
-          world.add(std::make_unique<Sphere>(center, 0.2, mat));
+          auto center2 =
+              center + Vec3{.x = 0, .y = random_double(0, 0.5), .z = 0};
+          world.add(std::make_unique<Sphere>(center, center2, 0.2, mat));
         } else if (choose_mat < 0.95) {
           auto albedo = Vec3::random(0.5, 1);
           auto fuzz = random_double(0, 0.5);

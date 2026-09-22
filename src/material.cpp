@@ -10,14 +10,14 @@
 
 Lambertian::Lambertian(Color albedo) : albedo_(albedo) {};
 
-std::optional<Scatter> Lambertian::scatter(const Ray & /*ray*/,
+std::optional<Scatter> Lambertian::scatter(const Ray &ray,
                                            const HitRecord &rec) const {
   auto direction = rec.normal_ + Vec3::random_unit();
   if (direction.near_zero()) {
     direction = rec.normal_;
   }
-  return Scatter{.scattered = Ray{rec.hit_point_, direction},
-                 .attenuation = albedo_};
+  auto scattered = Ray{rec.hit_point_, direction, ray.time_};
+  return Scatter{.scattered = scattered, .attenuation = albedo_};
 }
 
 Metal::Metal(Color albedo, double fuzz)
@@ -25,13 +25,13 @@ Metal::Metal(Color albedo, double fuzz)
 
 std::optional<Scatter> Metal::scatter(const Ray &ray,
                                       const HitRecord &rec) const {
-  auto direction = ray.direction_.reflect(rec.normal_);
-  direction = direction.unit() + fuzz_ * Vec3::random_unit();
-  if (direction.dot(rec.normal_) <= 0) {
+  auto reflected = ray.direction_.reflect(rec.normal_);
+  reflected = reflected.unit() + fuzz_ * Vec3::random_unit();
+  auto scattered = Ray{rec.hit_point_, reflected, ray.time_};
+  if (scattered.direction_.dot(rec.normal_) <= 0) {
     return {};
   }
-  return Scatter{.scattered = Ray{rec.hit_point_, direction},
-                 .attenuation = albedo_};
+  return Scatter{.scattered = scattered, .attenuation = albedo_};
 }
 
 Dielectrics::Dielectrics(double refraction_index)
@@ -60,11 +60,11 @@ std::optional<Scatter> Dielectrics::scatter(const Ray &ray,
   auto cannot_refract = ri * sin_theta > 1.0;
   if (cannot_refract || refelectance(cos_theta, ri) > random_double()) {
     auto reflected = unit_direction.reflect(rec.normal_);
-    return Scatter{.scattered = Ray{rec.hit_point_, reflected},
-                   .attenuation = attenuation};
+    auto scattered = Ray{rec.hit_point_, reflected, ray.time_};
+    return Scatter{.scattered = scattered, .attenuation = attenuation};
   }
 
   auto refracted = unit_direction.refract(rec.normal_, ri);
-  return Scatter{.scattered = Ray{rec.hit_point_, refracted},
-                 .attenuation = attenuation};
+  auto scattered = Ray{rec.hit_point_, refracted, ray.time_};
+  return Scatter{.scattered = scattered, .attenuation = attenuation};
 }

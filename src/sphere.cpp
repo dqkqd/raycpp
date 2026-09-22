@@ -10,15 +10,18 @@
 #include <optional>
 #include <utility>
 
-Sphere::Sphere(Point center, double radius, std::shared_ptr<Material> material)
-    : center_(center), radius_(radius), material_(std::move(material)) {};
+Sphere::Sphere(Point center1, Point center2, double radius,
+               std::shared_ptr<Material> material)
+    : center_{center1, center2 - center1}, radius_(radius),
+      material_(std::move(material)) {};
 
-Vec3 Sphere::outward_normal(const Point &at) const {
-  return (at - center_).unit();
-}
+Sphere::Sphere(Point center, double radius, std::shared_ptr<Material> material)
+    : center_{center, {.x = 0, .y = 0, .z = 0}}, radius_(radius),
+      material_(std::move(material)) {};
 
 std::optional<HitRecord> Sphere::hit(const Ray &ray, Interval interval) const {
-  auto oc = center_ - ray.origin_;
+  auto current_center = center_.at(ray.time_);
+  auto oc = current_center - ray.origin_;
   auto a = ray.direction_.dot(ray.direction_);
   auto b = ray.direction_.dot(oc);
   auto c = oc.dot(oc) - (radius_ * radius_);
@@ -38,7 +41,7 @@ std::optional<HitRecord> Sphere::hit(const Ray &ray, Interval interval) const {
   }
 
   auto hit_point = ray.at(distance);
-  auto normal = outward_normal(hit_point);
+  auto normal = (hit_point - current_center) / radius_;
 
   if (normal.dot(ray.direction_) > 0) {
     return HitRecord(hit_point, HitRecord::Direction::Inward, -normal, distance,
