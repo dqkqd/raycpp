@@ -30,5 +30,5 @@ public:
 private:
   std::vector<std::unique_ptr<Hittable>> objects;
 
-  AABB bbox = AABB::empty;
+  AABB bbox = AABB::empty();
 };

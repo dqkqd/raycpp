@@ -5,6 +5,9 @@
 #include <algorithm>
 #include <optional>
 
+AABB::AABB(const Interval &xi, const Interval &yi, const Interval &zi) noexcept
+    : x(xi), y(yi), z(zi) {}
+
 AABB::AABB(const Point &a, const Point &b)
     : x(a.x <= b.x ? Interval{a.x, b.x} : Interval{b.x, a.x}),
       y(a.y <= b.y ? Interval{a.y, b.y} : Interval{b.y, a.y}),
@@ -43,4 +46,8 @@ AABB::Axis AABB::longest_axis() const {
     return x.size() > z.size() ? AABB::Axis::X : AABB::Axis::Z;
   }
   return y.size() > z.size() ? AABB::Axis::Y : AABB::Axis::Z;
+}
+
+AABB AABB::empty() {
+  return {Interval::empty(), Interval::empty(), Interval::empty()};
 }

@@ -14,7 +14,7 @@
 BvhNode::BvhNode(World &&world) : BvhNode(std::move(world).objects) {}
 
 BvhNode::BvhNode(std::vector<std::unique_ptr<Hittable>> objects)
-    : bbox(AABB::empty) {
+    : bbox(AABB::empty()) {
 
   for (const auto &object : objects) {
     bbox = bbox.merge(object->bounding_box());

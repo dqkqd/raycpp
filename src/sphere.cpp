@@ -1,4 +1,5 @@
 #include "sphere.hpp"
+#include "aabb.hpp"
 #include "hit.hpp"
 #include "interval.hpp"
 #include "material.hpp"
@@ -13,12 +14,18 @@
 Sphere::Sphere(Point center1, Point center2, double radius,
                std::shared_ptr<Material> material)
     : center_{center1, center2 - center1}, radius_(radius),
-      material_(std::move(material)),
-      bbox{center1 - Vec3{.x = radius, .y = radius, .z = radius},
-           center2 + Vec3{.x = radius, .y = radius, .z = radius}} {};
+      material_(std::move(material)), bbox(AABB::empty()) {
+  auto rvec = Vec3{.x = radius, .y = radius, .z = radius};
+  auto bbox1 = AABB(center_.at(0) - rvec, center_.at(0) + rvec);
+  auto bbox2 = AABB(center_.at(1) - rvec, center_.at(1) + rvec);
+  bbox = bbox1.merge(bbox2);
+};
 
 Sphere::Sphere(Point center, double radius, std::shared_ptr<Material> material)
-    : Sphere(center, center, radius, std::move(material)) {}
+    : center_{center, Vec3{.x = 0, .y = 0, .z = 0}}, radius_(radius),
+      material_(std::move(material)),
+      bbox(center - Vec3{.x = radius, .y = radius, .z = radius},
+           center + Vec3{.x = radius, .y = radius, .z = radius}) {}
 
 std::optional<HitRecord> Sphere::hit(const Ray &ray, Interval interval) const {
   auto current_center = center_.at(ray.time_);

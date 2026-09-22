@@ -13,6 +13,7 @@ World::World(World &&w) noexcept
 World &World::operator=(World &&w) noexcept {
   if (this != &w) {
     objects = std::move(w.objects);
+    bbox = w.bbox;
   }
   return *this;
 }

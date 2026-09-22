@@ -1,6 +1,7 @@
 #pragma once
 
 #include "interval.hpp"
+#include "point.hpp"
 #include "ray.hpp"
 #include <cstdint>
 #include <optional>
@@ -11,10 +12,7 @@ public:
 
   Interval x, y, z;
 
-  constexpr AABB(const Interval &xi, const Interval &yi,
-                 const Interval &zi) noexcept
-      : x(xi), y(yi), z(zi) {}
-
+  AABB(const Interval &xi, const Interval &yi, const Interval &zi) noexcept;
   AABB(const Point &a, const Point &b);
 
   [[nodiscard]] std::optional<Interval> hit(const Ray &ray,
@@ -24,8 +22,5 @@ public:
 
   [[nodiscard]] Axis longest_axis() const;
 
-  static const AABB empty;
+  static AABB empty();
 };
-
-inline constexpr AABB AABB::empty{Interval::empty, Interval::empty,
-                                  Interval::empty};
