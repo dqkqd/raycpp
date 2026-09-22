@@ -38,7 +38,3 @@ target_compile_options(
 
 target_link_options(raycpp PRIVATE
                     $<$<CONFIG:Debug>:-fsanitize=address,undefined>)
-
-find_package(OpenMP REQUIRED)
-target_link_libraries(raycpp PRIVATE OpenMP::OpenMP_CXX)
-target_compile_options(raycpp PRIVATE -fopenmp)

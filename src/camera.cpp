@@ -14,6 +14,7 @@
 #include <functional>
 #include <iostream>
 #include <string>
+#include <thread>
 
 Camera Camera::init(double aspect_ratio, int image_width, int samples_per_pixel,
                     int max_depth, double vfov, Point lookfrom, Point lookat,
@@ -69,9 +70,14 @@ bool Camera::render(const Hittable &world) const {
   Progress progress(N_CHUNKS);
   auto start = std::chrono::high_resolution_clock::now();
 
-#pragma omp parallel for schedule(dynamic)
-  for (int chunk = 0; chunk < N_CHUNKS; chunk++) {
-    results[chunk] = write_chunk(chunk, world, progress);
+  {
+    std::vector<std::jthread> threads;
+    threads.reserve(N_CHUNKS);
+    for (int chunk = 0; chunk < N_CHUNKS; chunk++) {
+      threads.emplace_back([&, chunk]() {
+        results[chunk] = write_chunk(chunk, world, progress);
+      });
+    }
   }
 
   if (!std::ranges::all_of(results, std::identity{})) {
