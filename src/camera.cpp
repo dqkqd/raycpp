@@ -155,8 +155,8 @@ Point Camera::defocus_disk_sample() const {
 }
 
 Ray Camera::sample_ray(int i, int j) const {
-  auto offsetx = random_double();
-  auto offsety = random_double();
+  auto offsetx = random_double() - 0.5;
+  auto offsety = random_double() - 0.5;
 
   auto pixel_sample = pixel00_loc_ + (i + offsetx) * pixel_delta_u_ +
                       (j + offsety) * pixel_delta_v_;
