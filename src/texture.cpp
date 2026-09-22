@@ -1,5 +1,7 @@
 #include "texture.hpp"
 #include "color.hpp"
+#include "image.hpp"
+#include "interval.hpp"
 #include "point.hpp"
 #include <memory>
 #include <utility>
@@ -26,4 +28,18 @@ Color CheckerTexture::value(const TextureCoordinate &coord,
   auto iz = static_cast<int>(inv_scale * p.z);
   auto is_even = (ix + iy + iz) % 2 == 0;
   return is_even ? even_->value(coord, p) : odd_->value(coord, p);
+}
+
+ImageTexture::ImageTexture(const std::string &filename) : image{filename} {}
+
+Color ImageTexture::value(const TextureCoordinate &coord,
+                          const Point & /*p*/) const {
+  if (image.height() <= 0) {
+    return {.r = 0, .g = 1, .b = 1};
+  }
+  auto u = Interval(0, 1).clamp(coord.u);
+  auto v = 1 - Interval(0, 1).clamp(coord.v);
+  auto i = static_cast<int>(u * image.width());
+  auto j = static_cast<int>(v * image.height());
+  return image.data(i, j);
 }

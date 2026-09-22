@@ -23,11 +23,13 @@ set(LIB_SOURCES
     src/aabb.cpp
     src/bvh.cpp
     src/texture.cpp
-    src/scenes.cpp)
+    src/scenes.cpp
+    src/image.cpp)
 
 add_executable(raycpp src/main.cpp ${LIB_SOURCES})
 
 target_include_directories(raycpp PRIVATE include)
+target_include_directories(raycpp SYSTEM PRIVATE external)
 target_compile_options(
   raycpp
   PRIVATE -Wall

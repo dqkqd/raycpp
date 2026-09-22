@@ -1,8 +1,10 @@
 #pragma once
 
 #include "color.hpp"
+#include "image.hpp"
 #include "point.hpp"
 #include <memory>
+#include <string>
 
 class TextureCoordinate {
 public:
@@ -48,4 +50,15 @@ private:
   double inv_scale;
   std::shared_ptr<Texture> even_;
   std::shared_ptr<Texture> odd_;
+};
+
+class ImageTexture : public Texture {
+public:
+  explicit ImageTexture(const std::string &filename);
+
+  [[nodiscard]] Color value(const TextureCoordinate &coord,
+                            const Point &p) const override;
+
+private:
+  Image image;
 };

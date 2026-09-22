@@ -93,3 +93,23 @@ int checker_spheres() {
 
   return 0;
 }
+
+int earth() {
+  auto cam =
+      Camera::init(16.0 / 9.0, 400, 100, 50, 20, Point{.x = 0, .y = 0, .z = 12},
+                   {.x = 0, .y = 0, .z = 0}, {.x = 0, .y = 1, .z = 0}, 0, 10.0);
+
+  auto world = World();
+
+  auto earth_texture = std::make_shared<ImageTexture>("images/earthmap.jpg");
+  auto earth_surface = std::make_shared<Lambertian>(earth_texture);
+  auto globe =
+      std::make_unique<Sphere>(Point{.x = 0, .y = 0, .z = 0}, 2, earth_surface);
+
+  world.add(std::move(globe));
+  if (!cam.render(world)) {
+    return 1;
+  }
+
+  return 0;
+};
