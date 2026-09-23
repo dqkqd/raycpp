@@ -16,4 +16,5 @@ public:
   friend Interval operator+(const Interval &interval, double offset);
 
   static Interval empty();
+  static Interval universe();
 };

@@ -85,3 +85,14 @@ Color DiffuseLight::emitted(const TextureCoordinate &coord,
                             const Point &p) const {
   return tex_->value(coord, p);
 }
+
+Isotropic::Isotropic(const Color &albedo)
+    : tex_(std::make_shared<SolidColor>(albedo)) {};
+Isotropic::Isotropic(std::shared_ptr<Texture> tex) : tex_(std::move(tex)) {};
+
+std::optional<Scatter> Isotropic::scatter(const Ray &ray,
+                                          const HitRecord &rec) const {
+  auto scattered = Ray{rec.hit_point_, Vec3::random_unit(), ray.time_};
+  return Scatter{.scattered = scattered,
+                 .attenuation = tex_->value(rec.coord_, rec.hit_point_)};
+}

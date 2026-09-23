@@ -7,3 +7,4 @@
 [[maybe_unused]] int quads();
 [[maybe_unused]] int simple_light();
 [[maybe_unused]] int cornell_box();
+[[maybe_unused]] int cornell_smoke();

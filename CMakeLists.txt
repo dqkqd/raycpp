@@ -28,7 +28,8 @@ set(LIB_SOURCES
     src/quad.cpp
     src/perlin.cpp
     src/quad.cpp
-    src/transform.cpp)
+    src/transform.cpp
+    src/constant_medium.cpp)
 
 add_executable(raycpp src/main.cpp ${LIB_SOURCES})
 

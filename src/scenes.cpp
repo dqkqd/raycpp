@@ -2,6 +2,7 @@
 #include "bvh.hpp"
 #include "camera.hpp"
 #include "color.hpp"
+#include "constant_medium.hpp"
 #include "material.hpp"
 #include "point.hpp"
 #include "quad.hpp"
@@ -256,6 +257,66 @@ int cornell_box() {
   box2 = std::make_unique<RotateY>(std::move(box2), -18);
   box2 = std::make_unique<Translate>(std::move(box2),
                                      Vec3{.x = 130, .y = 0, .z = 65});
+  world.add(std::move(box2));
+
+  auto world_tree = BvhNode(std::move(world));
+  if (!cam.render(world_tree)) {
+    return 1;
+  }
+
+  return 0;
+}
+
+int cornell_smoke() {
+  auto cam =
+      Camera::init(1.0, 600, 100, 50, 40, Point{.x = 278, .y = 278, .z = -800},
+                   {.x = 278, .y = 278, .z = 0}, {.x = 0, .y = 1, .z = 0}, 0,
+                   10.0, {.r = 0, .g = 0, .b = 0});
+
+  auto world = World();
+
+  auto red = std::make_shared<Lambertian>(Color{.r = .65, .g = .05, .b = .05});
+  auto white =
+      std::make_shared<Lambertian>(Color{.r = .73, .g = .73, .b = .73});
+  auto green =
+      std::make_shared<Lambertian>(Color{.r = .12, .g = .45, .b = .15});
+  auto light = std::make_shared<DiffuseLight>(Color{.r = 7, .g = 7, .b = 7});
+
+  world.add(std::make_unique<Quad>(Point{.x = 555, .y = 0, .z = 0},
+                                   Vec3{.x = 0, .y = 555, .z = 0},
+                                   Vec3{.x = 0, .y = 0, .z = 555}, green));
+  world.add(std::make_unique<Quad>(Point{.x = 0, .y = 0, .z = 0},
+                                   Vec3{.x = 0, .y = 555, .z = 0},
+                                   Vec3{.x = 0, .y = 0, .z = 555}, red));
+  world.add(std::make_unique<Quad>(Point{.x = 113, .y = 554, .z = 127},
+                                   Vec3{.x = 330, .y = 0, .z = 0},
+                                   Vec3{.x = 0, .y = 0, .z = 305}, light));
+  world.add(std::make_unique<Quad>(Point{.x = 0, .y = 0, .z = 0},
+                                   Vec3{.x = 555, .y = 0, .z = 0},
+                                   Vec3{.x = 0, .y = 0, .z = 555}, white));
+  world.add(std::make_unique<Quad>(Point{.x = 555, .y = 555, .z = 555},
+                                   Vec3{.x = -555, .y = 0, .z = 0},
+                                   Vec3{.x = 0, .y = 0, .z = -555}, white));
+  world.add(std::make_unique<Quad>(Point{.x = 0, .y = 0, .z = 555},
+                                   Vec3{.x = 555, .y = 0, .z = 0},
+                                   Vec3{.x = 0, .y = 555, .z = 0}, white));
+
+  std::unique_ptr<Hittable> box1 =
+      box({.x = 0, .y = 0, .z = 0}, {.x = 165, .y = 330, .z = 165}, white);
+  box1 = std::make_unique<RotateY>(std::move(box1), 15);
+  box1 = std::make_unique<Translate>(std::move(box1),
+                                     Vec3{.x = 265, .y = 0, .z = 295});
+  box1 = std::make_unique<ConstantMedium>(std::move(box1), 0.01,
+                                          Color{.r = 0, .g = 0, .b = 0});
+  world.add(std::move(box1));
+
+  std::unique_ptr<Hittable> box2 =
+      box({.x = 0, .y = 0, .z = 0}, {.x = 165, .y = 165, .z = 165}, white);
+  box2 = std::make_unique<RotateY>(std::move(box2), -18);
+  box2 = std::make_unique<Translate>(std::move(box2),
+                                     Vec3{.x = 130, .y = 0, .z = 65});
+  box2 = std::make_unique<ConstantMedium>(std::move(box2), 0.01,
+                                          Color{.r = 1, .g = 1, .b = 1});
   world.add(std::move(box2));
 
   auto world_tree = BvhNode(std::move(world));

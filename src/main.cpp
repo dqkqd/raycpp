@@ -1,7 +1,7 @@
 #include "scenes.hpp"
 
 int main() {
-  const int cs = 7;
+  const int cs = 8;
   switch (cs) {
   case 1:
     return bouncing_spheres();
@@ -17,6 +17,8 @@ int main() {
     return simple_light();
   case 7:
     return cornell_box();
+  case 8:
+    return cornell_smoke();
   default:
     return 1;
   }
