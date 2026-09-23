@@ -12,3 +12,7 @@ Point operator+(const Point &p, const Vec3 &v) {
 Point operator-(const Point &p, const Vec3 &v) {
   return {.x = p.x - v.x, .y = p.y - v.y, .z = p.z - v.z};
 }
+
+Point operator*(const Point &p, double s) {
+  return {.x = p.x * s, .y = p.y * s, .z = p.z * s};
+}

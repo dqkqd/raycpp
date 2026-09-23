@@ -11,4 +11,5 @@ public:
 
   friend Point operator+(const Point &p, const Vec3 &v);
   friend Point operator-(const Point &p, const Vec3 &v);
+  friend Point operator*(const Point &p, double s);
 };

@@ -44,7 +44,9 @@ Color ImageTexture::value(const TextureCoordinate &coord,
   return image.data(i, j);
 }
 
+NoiseTexture::NoiseTexture(double scale) : scale_(scale) {}
+
 Color NoiseTexture::value(const TextureCoordinate & /*coord*/,
                           const Point &p) const {
-  return Color{.r = 1, .g = 1, .b = 1} * noise.noise(p);
+  return Color{.r = 1, .g = 1, .b = 1} * noise.noise(p * scale_);
 }

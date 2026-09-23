@@ -121,7 +121,7 @@ int perlin_spheres() {
 
   auto world = World();
 
-  auto pertext = std::make_shared<NoiseTexture>();
+  auto pertext = std::make_shared<NoiseTexture>(4);
   world.add(std::make_unique<Sphere>(Point{.x = 0, .y = -1000, .z = 0}, 1000,
                                      std::make_shared<Lambertian>(pertext)));
   world.add(std::make_unique<Sphere>(Point{.x = 0, .y = 2, .z = 0}, 2,

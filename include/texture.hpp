@@ -66,9 +66,12 @@ private:
 
 class NoiseTexture : public Texture {
 public:
+  explicit NoiseTexture(double scale);
+
   [[nodiscard]] Color value(const TextureCoordinate &coord,
                             const Point &p) const override;
 
 private:
   Perlin noise;
+  double scale_;
 };
