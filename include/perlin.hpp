@@ -8,6 +8,7 @@ class Perlin {
 public:
   Perlin();
   [[nodiscard]] double noise(const Point &p) const;
+  [[nodiscard]] double turb(const Point &p, int depth) const;
 
 private:
   static constexpr int point_count = 256;

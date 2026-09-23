@@ -3,6 +3,7 @@
 #include "image.hpp"
 #include "interval.hpp"
 #include "point.hpp"
+#include <cmath>
 #include <memory>
 #include <utility>
 
@@ -48,5 +49,6 @@ NoiseTexture::NoiseTexture(double scale) : scale_(scale) {}
 
 Color NoiseTexture::value(const TextureCoordinate & /*coord*/,
                           const Point &p) const {
-  return Color{.r = 1, .g = 1, .b = 1} * 0.5 * (1 + noise.noise(p * scale_));
+  return Color{.r = 0.5, .g = 0.5, .b = 0.5} *
+         (1 + std::sin((scale_ * p.z) + (10 * noise.turb(p, 7))));
 }
