@@ -1,7 +1,7 @@
 #include "scenes.hpp"
 
 int main() {
-  int cs = 5;
+  const int cs = 5;
   switch (cs) {
   case 1:
     return bouncing_spheres();

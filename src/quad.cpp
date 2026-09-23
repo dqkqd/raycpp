@@ -11,7 +11,7 @@
 #include <utility>
 
 Quad::Quad(Point Q, Vec3 u, Vec3 v, std::shared_ptr<Material> material)
-    : Q(Q), u(u), v(v), material_(std::move(material)),
+    : Q_(Q), u_(u), v_(v), material_(std::move(material)),
       bbox(AABB(Q, Q + u + v).merge(AABB(Q + u, Q + v))) {
   auto n = u.cross(v);
   normal = n.unit();
@@ -37,7 +37,7 @@ std::optional<HitRecord> Quad::hit(const Ray &ray, Interval interval) const {
   }
 
   auto hit_point = ray.at(distance);
-  auto coord = texture_coordinate(hit_point - Q);
+  auto coord = texture_coordinate(hit_point - Q_);
   if (!is_interior(coord.u, coord.v)) {
     return {};
   }
@@ -47,8 +47,8 @@ std::optional<HitRecord> Quad::hit(const Ray &ray, Interval interval) const {
 }
 
 TextureCoordinate Quad::texture_coordinate(const Vec3 &p) const {
-  auto alpha = w.dot(p.cross(v));
-  auto beta = w.dot(u.cross(p));
+  auto alpha = w.dot(p.cross(v_));
+  auto beta = w.dot(u_.cross(p));
   return {.u = alpha, .v = beta};
 }
 

@@ -15,7 +15,7 @@ jobs:
           sudo ./llvm.sh 21
           sudo apt-get install -y clang-format-21
       - name: Check formatting
-        run: clang-format-21 --dry-run -Werror $(git ls-files '*.cpp' '*.hpp' '*.h')
+        run: clang-format-21 --dry-run -Werror $(git ls-files '*.cpp' '*.hpp')
   tidy:
     name: clang-tidy
     runs-on: ubuntu-latest

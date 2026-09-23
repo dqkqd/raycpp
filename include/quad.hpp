@@ -11,7 +11,7 @@
 
 class Quad : public Hittable {
 public:
-  Quad(Point Q, Vec3 u, Vec3 v, std::shared_ptr<Material>);
+  Quad(Point Q, Vec3 u, Vec3 v, std::shared_ptr<Material> material);
 
   [[nodiscard]] std::optional<HitRecord> hit(const Ray &ray,
                                              Interval interval) const override;
@@ -23,8 +23,8 @@ public:
   static bool is_interior(double a, double b);
 
 private:
-  Point Q;
-  Vec3 u, v;
+  Point Q_;
+  Vec3 u_, v_;
   Vec3 w{};
   std::shared_ptr<Material> material_;
   Vec3 normal{};
