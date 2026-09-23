@@ -1,5 +1,6 @@
 #include "perlin.hpp"
 #include "utils.hpp"
+#include <cmath>
 #include <cstdint>
 
 Perlin::Perlin() {
@@ -13,17 +14,30 @@ Perlin::Perlin() {
 }
 
 double Perlin::noise(const Point &p) const {
-  std::uint8_t i = (static_cast<std::uint32_t>(4 * p.x)) & 255U;
-  std::uint8_t j = (static_cast<std::uint32_t>(4 * p.y)) & 255U;
-  std::uint8_t k = (static_cast<std::uint32_t>(4 * p.z)) & 255U;
+  auto u = p.x - std::floor(p.x);
+  auto v = p.y - std::floor(p.y);
+  auto w = p.z - std::floor(p.z);
 
-  std::uint32_t iu = perm_x.at(i);
-  std::uint32_t ju = perm_x.at(j);
-  std::uint32_t ku = perm_x.at(k);
-  return randfloat.at(iu ^ ju ^ ku);
+  auto i = static_cast<uint32_t>(std::floor(p.x));
+  auto j = static_cast<uint32_t>(std::floor(p.y));
+  auto k = static_cast<uint32_t>(std::floor(p.z));
+
+  std::array<double, 8> c{};
+  for (int di = 0; di < 2; di++) {
+    for (int dj = 0; dj < 2; dj++) {
+      for (int dk = 0; dk < 2; dk++) {
+        c.at((di * 4) + (dj * 2) + dk) = randfloat.at(
+            perm_x.at((i + di) & 255U) ^ perm_y.at((j + dj) & 255U) ^
+            perm_z.at((k + dk) & 255U));
+      }
+    }
+  }
+
+  return trilinear_interp(c, u, v, w);
 }
 
-void Perlin::perlin_generate_perm(std::array<std::uint8_t, point_count> &perm) {
+void Perlin::perlin_generate_perm(
+    std::array<std::uint32_t, point_count> &perm) {
   for (int i = 0; i < point_count; i++) {
     perm.at(i) = i;
   }
@@ -34,4 +48,20 @@ void Perlin::perlin_generate_perm(std::array<std::uint8_t, point_count> &perm) {
     perm.at(i) = perm.at(target);
     perm.at(target) = tmp;
   }
+}
+
+double Perlin::trilinear_interp(std::array<double, 8> c, double u, double v,
+                                double w) {
+
+  auto accum = 0.0;
+  for (int i = 0; i < 2; i++) {
+    for (int j = 0; j < 2; j++) {
+      for (int k = 0; k < 2; k++) {
+        accum += ((i * u) + ((1 - i) * (1 - u))) *
+                 ((j * v) + ((1 - j) * (1 - v))) *
+                 ((k * w) + ((1 - k) * (1 - w))) * c.at((4 * i) + (2 * j) + k);
+      }
+    }
+  }
+  return accum;
 }
