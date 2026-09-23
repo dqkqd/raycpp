@@ -13,5 +13,7 @@ public:
   [[nodiscard]] double size() const;
   [[nodiscard]] Interval merge(const Interval &other) const;
 
+  friend Interval operator+(const Interval &interval, double offset);
+
   static Interval empty();
 };

@@ -68,3 +68,7 @@ void AABB::pad_to_minimums() {
     z = z.expand(delta);
   }
 }
+
+AABB operator+(const AABB &bbox, const Vec3 &offset) {
+  return {bbox.x + offset.x, bbox.y + offset.y, bbox.z + offset.z};
+}

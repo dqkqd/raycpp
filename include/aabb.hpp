@@ -24,6 +24,8 @@ public:
 
   static AABB empty();
 
+  friend AABB operator+(const AABB &bbox, const Vec3 &offset);
+
 private:
   void pad_to_minimums();
 };

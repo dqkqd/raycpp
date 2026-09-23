@@ -32,3 +32,7 @@ Interval Interval::empty() {
   return {std::numeric_limits<double>::infinity(),
           -std::numeric_limits<double>::infinity()};
 }
+
+Interval operator+(const Interval &interval, double offset) {
+  return {interval.min + offset, interval.max + offset};
+}

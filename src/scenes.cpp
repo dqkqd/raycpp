@@ -7,6 +7,7 @@
 #include "quad.hpp"
 #include "sphere.hpp"
 #include "texture.hpp"
+#include "transform.hpp"
 #include "utils.hpp"
 #include "vec3.hpp"
 #include "world.hpp"
@@ -243,10 +244,20 @@ int cornell_box() {
                                    Vec3{.x = 555, .y = 0, .z = 0},
                                    Vec3{.x = 0, .y = 555, .z = 0}, white));
 
-  world.add(
-      box({.x = 130, .y = 0, .z = 65}, {.x = 295, .y = 165, .z = 230}, white));
-  world.add(
-      box({.x = 265, .y = 0, .z = 295}, {.x = 430, .y = 330, .z = 460}, white));
+  std::unique_ptr<Hittable> box1 =
+      box({.x = 0, .y = 0, .z = 0}, {.x = 165, .y = 330, .z = 165}, white);
+  box1 = std::make_unique<RotateY>(std::move(box1), 15);
+  box1 = std::make_unique<Translate>(std::move(box1),
+                                     Vec3{.x = 265, .y = 0, .z = 295});
+  world.add(std::move(box1));
+
+  std::unique_ptr<Hittable> box2 =
+      box({.x = 0, .y = 0, .z = 0}, {.x = 165, .y = 165, .z = 165}, white);
+  box2 = std::make_unique<RotateY>(std::move(box2), -18);
+  box2 = std::make_unique<Translate>(std::move(box2),
+                                     Vec3{.x = 130, .y = 0, .z = 65});
+  world.add(std::move(box2));
+
   auto world_tree = BvhNode(std::move(world));
   if (!cam.render(world_tree)) {
     return 1;
