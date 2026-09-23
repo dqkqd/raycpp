@@ -211,7 +211,7 @@ int simple_light() {
 
 int cornell_box() {
   auto cam =
-      Camera::init(1.0, 400, 100, 50, 40, Point{.x = 278, .y = 278, .z = -800},
+      Camera::init(1.0, 600, 100, 50, 40, Point{.x = 278, .y = 278, .z = -800},
                    {.x = 278, .y = 278, .z = 0}, {.x = 0, .y = 1, .z = 0}, 0,
                    10.0, {.r = 0, .g = 0, .b = 0});
 
@@ -243,6 +243,10 @@ int cornell_box() {
                                    Vec3{.x = 555, .y = 0, .z = 0},
                                    Vec3{.x = 0, .y = 555, .z = 0}, white));
 
+  world.add(
+      box({.x = 130, .y = 0, .z = 65}, {.x = 295, .y = 165, .z = 230}, white));
+  world.add(
+      box({.x = 265, .y = 0, .z = 295}, {.x = 430, .y = 330, .z = 460}, white));
   auto world_tree = BvhNode(std::move(world));
   if (!cam.render(world_tree)) {
     return 1;

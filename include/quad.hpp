@@ -6,6 +6,7 @@
 #include "point.hpp"
 #include "texture.hpp"
 #include "vec3.hpp"
+#include "world.hpp"
 #include <memory>
 #include <optional>
 
@@ -31,3 +32,34 @@ private:
   double D{};
   AABB bbox = AABB::empty();
 };
+
+inline std::unique_ptr<World> box(const Point &a, const Point &b,
+                                  const std::shared_ptr<Material> &material) {
+  auto sides = std::make_unique<World>();
+
+  Point min = {.x = std::fmin(a.x, b.x),
+               .y = std::min(a.y, b.y),
+               .z = std::min(a.z, b.z)};
+  Point max = {.x = std::fmax(a.x, b.x),
+               .y = std::max(a.y, b.y),
+               .z = std::max(a.z, b.z)};
+
+  Vec3 dx = {.x = max.x - min.x, .y = 0, .z = 0};
+  Vec3 dy = {.x = 0, .y = max.y - min.y, .z = 0};
+  Vec3 dz = {.x = 0, .y = 0, .z = max.z - min.z};
+
+  sides->add(std::make_unique<Quad>(Point{.x = min.x, .y = min.y, .z = max.z},
+                                    dx, dy, material));
+  sides->add(std::make_unique<Quad>(Point{.x = max.x, .y = min.y, .z = max.z},
+                                    -dz, dy, material));
+  sides->add(std::make_unique<Quad>(Point{.x = max.x, .y = min.y, .z = min.z},
+                                    -dx, dy, material));
+  sides->add(std::make_unique<Quad>(Point{.x = min.x, .y = min.y, .z = min.z},
+                                    dz, dy, material));
+  sides->add(std::make_unique<Quad>(Point{.x = min.x, .y = max.y, .z = max.z},
+                                    dx, -dz, material));
+  sides->add(std::make_unique<Quad>(Point{.x = min.x, .y = max.y, .z = min.z},
+                                    dx, dz, material));
+
+  return sides;
+}
