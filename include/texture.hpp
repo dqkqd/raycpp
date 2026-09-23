@@ -2,6 +2,7 @@
 
 #include "color.hpp"
 #include "image.hpp"
+#include "perlin.hpp"
 #include "point.hpp"
 #include <memory>
 #include <string>
@@ -61,4 +62,13 @@ public:
 
 private:
   Image image;
+};
+
+class NoiseTexture : public Texture {
+public:
+  [[nodiscard]] Color value(const TextureCoordinate &coord,
+                            const Point &p) const override;
+
+private:
+  Perlin noise;
 };

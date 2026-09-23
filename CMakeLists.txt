@@ -24,7 +24,8 @@ set(LIB_SOURCES
     src/bvh.cpp
     src/texture.cpp
     src/scenes.cpp
-    src/image.cpp)
+    src/image.cpp
+    src/perlin.cpp)
 
 add_executable(raycpp src/main.cpp ${LIB_SOURCES})
 

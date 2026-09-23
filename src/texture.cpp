@@ -43,3 +43,8 @@ Color ImageTexture::value(const TextureCoordinate &coord,
   auto j = static_cast<int>(v * image.height());
   return image.data(i, j);
 }
+
+Color NoiseTexture::value(const TextureCoordinate & /*coord*/,
+                          const Point &p) const {
+  return Color{.r = 1, .g = 1, .b = 1} * noise.noise(p);
+}
