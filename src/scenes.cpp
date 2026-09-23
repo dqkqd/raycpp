@@ -208,3 +208,45 @@ int simple_light() {
 
   return 0;
 }
+
+int cornell_box() {
+  auto cam =
+      Camera::init(1.0, 400, 100, 50, 40, Point{.x = 278, .y = 278, .z = -800},
+                   {.x = 278, .y = 278, .z = 0}, {.x = 0, .y = 1, .z = 0}, 0,
+                   10.0, {.r = 0, .g = 0, .b = 0});
+
+  auto world = World();
+
+  auto red = std::make_shared<Lambertian>(Color{.r = .65, .g = .05, .b = .05});
+  auto white =
+      std::make_shared<Lambertian>(Color{.r = .73, .g = .73, .b = .73});
+  auto green =
+      std::make_shared<Lambertian>(Color{.r = .12, .g = .45, .b = .15});
+  auto light = std::make_shared<DiffuseLight>(Color{.r = 15, .g = 15, .b = 15});
+
+  world.add(std::make_unique<Quad>(Point{.x = 555, .y = 0, .z = 0},
+                                   Vec3{.x = 0, .y = 555, .z = 0},
+                                   Vec3{.x = 0, .y = 0, .z = 555}, green));
+  world.add(std::make_unique<Quad>(Point{.x = 0, .y = 0, .z = 0},
+                                   Vec3{.x = 0, .y = 555, .z = 0},
+                                   Vec3{.x = 0, .y = 0, .z = 555}, red));
+  world.add(std::make_unique<Quad>(Point{.x = 343, .y = 554, .z = 332},
+                                   Vec3{.x = -130, .y = 0, .z = 0},
+                                   Vec3{.x = 0, .y = 0, .z = -105}, light));
+  world.add(std::make_unique<Quad>(Point{.x = 0, .y = 0, .z = 0},
+                                   Vec3{.x = 555, .y = 0, .z = 0},
+                                   Vec3{.x = 0, .y = 0, .z = 555}, white));
+  world.add(std::make_unique<Quad>(Point{.x = 555, .y = 555, .z = 555},
+                                   Vec3{.x = -555, .y = 0, .z = 0},
+                                   Vec3{.x = 0, .y = 0, .z = -555}, white));
+  world.add(std::make_unique<Quad>(Point{.x = 0, .y = 0, .z = 555},
+                                   Vec3{.x = 555, .y = 0, .z = 0},
+                                   Vec3{.x = 0, .y = 555, .z = 0}, white));
+
+  auto world_tree = BvhNode(std::move(world));
+  if (!cam.render(world_tree)) {
+    return 1;
+  }
+
+  return 0;
+}
