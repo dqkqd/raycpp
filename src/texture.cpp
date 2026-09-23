@@ -48,5 +48,5 @@ NoiseTexture::NoiseTexture(double scale) : scale_(scale) {}
 
 Color NoiseTexture::value(const TextureCoordinate & /*coord*/,
                           const Point &p) const {
-  return Color{.r = 1, .g = 1, .b = 1} * noise.noise(p * scale_);
+  return Color{.r = 1, .g = 1, .b = 1} * 0.5 * (1 + noise.noise(p * scale_));
 }

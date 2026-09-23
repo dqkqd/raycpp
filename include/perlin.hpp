@@ -12,11 +12,11 @@ public:
 private:
   static constexpr int point_count = 256;
 
-  std::array<double, point_count> randfloat{};
+  std::array<Vec3, point_count> randvec{};
   std::array<std::uint32_t, point_count> perm_x{}, perm_y{}, perm_z{};
 
-  static double trilinear_interp(std::array<double, 8> c, double u, double v,
-                                 double w);
+  static double perlin_interp(std::array<Vec3, 8> c, double u, double v,
+                              double w);
 
   static void
   perlin_generate_perm(std::array<std::uint32_t, point_count> &perm);
