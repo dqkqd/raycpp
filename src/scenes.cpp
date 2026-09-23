@@ -4,6 +4,7 @@
 #include "color.hpp"
 #include "material.hpp"
 #include "point.hpp"
+#include "quad.hpp"
 #include "sphere.hpp"
 #include "texture.hpp"
 #include "utils.hpp"
@@ -126,6 +127,47 @@ int perlin_spheres() {
                                      std::make_shared<Lambertian>(pertext)));
   world.add(std::make_unique<Sphere>(Point{.x = 0, .y = 2, .z = 0}, 2,
                                      std::make_shared<Lambertian>(pertext)));
+
+  auto world_tree = BvhNode(std::move(world));
+  if (!cam.render(world_tree)) {
+    return 1;
+  }
+
+  return 0;
+};
+
+int quads() {
+  auto cam =
+      Camera::init(1.0, 400, 100, 50, 80, Point{.x = 0, .y = 0, .z = 9},
+                   {.x = 0, .y = 0, .z = 0}, {.x = 0, .y = 1, .z = 0}, 0, 10.0);
+
+  auto world = World();
+
+  auto left_red = std::make_shared<Lambertian>(Color{.r = 1, .g = .2, .b = .2});
+  auto back_green =
+      std::make_shared<Lambertian>(Color{.r = .2, .g = 1, .b = .2});
+  auto right_blue =
+      std::make_shared<Lambertian>(Color{.r = .2, .g = .2, .b = 1});
+  auto upper_orange =
+      std::make_shared<Lambertian>(Color{.r = 1, .g = .5, .b = 0});
+  auto lower_teal =
+      std::make_shared<Lambertian>(Color{.r = .2, .g = .8, .b = .8});
+
+  world.add(std::make_unique<Quad>(Point{.x = -3, .y = -2, .z = 5},
+                                   Vec3{.x = 0, .y = 0, .z = -4},
+                                   Vec3{.x = 0, .y = 4, .z = 0}, left_red));
+  world.add(std::make_unique<Quad>(Point{.x = -2, .y = -2, .z = 0},
+                                   Vec3{.x = 4, .y = 0, .z = 0},
+                                   Vec3{.x = 0, .y = 4, .z = 0}, back_green));
+  world.add(std::make_unique<Quad>(Point{.x = 3, .y = -2, .z = 1},
+                                   Vec3{.x = 0, .y = 0, .z = 4},
+                                   Vec3{.x = 0, .y = 4, .z = 0}, right_blue));
+  world.add(std::make_unique<Quad>(Point{.x = -2, .y = 3, .z = 1},
+                                   Vec3{.x = 4, .y = 0, .z = 0},
+                                   Vec3{.x = 0, .y = 0, .z = 4}, upper_orange));
+  world.add(std::make_unique<Quad>(Point{.x = -2, .y = -3, .z = 5},
+                                   Vec3{.x = 4, .y = 0, .z = 0},
+                                   Vec3{.x = 0, .y = 0, .z = -4}, lower_teal));
 
   auto world_tree = BvhNode(std::move(world));
   if (!cam.render(world_tree)) {

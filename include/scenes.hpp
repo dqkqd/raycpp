@@ -4,3 +4,4 @@
 [[maybe_unused]] int checker_spheres();
 [[maybe_unused]] int earth();
 [[maybe_unused]] int perlin_spheres();
+[[maybe_unused]] int quads();

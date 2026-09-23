@@ -6,7 +6,8 @@ public:
 
   Interval(double tmin, double tmax) noexcept;
 
-  [[nodiscard]] bool surround(double x) const;
+  [[nodiscard]] bool surrounds(double x) const;
+  [[nodiscard]] bool contains(double x) const;
   [[nodiscard]] double clamp(double x) const;
   [[nodiscard]] Interval expand(double delta) const;
   [[nodiscard]] double size() const;

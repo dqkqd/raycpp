@@ -1,7 +1,7 @@
 #include "scenes.hpp"
 
 int main() {
-  int cs = 4;
+  int cs = 5;
   switch (cs) {
   case 1:
     return bouncing_spheres();
@@ -11,6 +11,8 @@ int main() {
     return earth();
   case 4:
     return perlin_spheres();
+  case 5:
+    return quads();
   default:
     return 1;
   }

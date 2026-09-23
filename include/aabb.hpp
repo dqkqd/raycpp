@@ -23,4 +23,7 @@ public:
   [[nodiscard]] Axis longest_axis() const;
 
   static AABB empty();
+
+private:
+  void pad_to_minimums();
 };

@@ -4,7 +4,8 @@
 
 Interval::Interval(double tmin, double tmax) noexcept : min(tmin), max(tmax) {}
 
-bool Interval::surround(double x) const { return min < x && x < max; }
+bool Interval::surrounds(double x) const { return min < x && x < max; }
+bool Interval::contains(double x) const { return min <= x && x <= max; }
 
 double Interval::clamp(double x) const {
   if (x < min) {

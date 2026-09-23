@@ -51,9 +51,9 @@ std::optional<HitRecord> Sphere::hit(const Ray &ray, Interval interval) const {
   auto delta_s = sqrt(delta);
 
   auto distance = (b - delta_s) / a;
-  if (!interval.surround(distance)) {
+  if (!interval.surrounds(distance)) {
     distance = (b + delta_s) / a;
-    if (!interval.surround(distance)) {
+    if (!interval.surrounds(distance)) {
       return {};
     }
   }

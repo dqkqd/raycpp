@@ -6,12 +6,16 @@
 #include <optional>
 
 AABB::AABB(const Interval &xi, const Interval &yi, const Interval &zi) noexcept
-    : x(xi), y(yi), z(zi) {}
+    : x(xi), y(yi), z(zi) {
+  pad_to_minimums();
+}
 
 AABB::AABB(const Point &a, const Point &b)
     : x(a.x <= b.x ? Interval{a.x, b.x} : Interval{b.x, a.x}),
       y(a.y <= b.y ? Interval{a.y, b.y} : Interval{b.y, a.y}),
-      z(a.z <= b.z ? Interval{a.z, b.z} : Interval{b.z, a.z}) {}
+      z(a.z <= b.z ? Interval{a.z, b.z} : Interval{b.z, a.z}) {
+  pad_to_minimums();
+}
 
 std::optional<Interval> AABB::hit(const Ray &ray, const Interval &ray_t) const {
   auto tmin = ray_t.min;
@@ -50,4 +54,17 @@ AABB::Axis AABB::longest_axis() const {
 
 AABB AABB::empty() {
   return {Interval::empty(), Interval::empty(), Interval::empty()};
+}
+
+void AABB::pad_to_minimums() {
+  double delta = 0.0001;
+  if (x.size() < delta) {
+    x = x.expand(delta);
+  }
+  if (y.size() < delta) {
+    y = y.expand(delta);
+  }
+  if (z.size() < delta) {
+    z = z.expand(delta);
+  }
 }
