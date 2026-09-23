@@ -13,7 +13,7 @@ public:
   static Camera init(double aspect_ratio, int image_width,
                      int samples_per_pixel, int max_depth, double vfov,
                      Point lookfrom, Point lookat, Vec3 vup,
-                     double defocus_angle, double focus_dist);
+                     double defocus_angle, double focus_dist, Color background);
 
   [[nodiscard]] bool render(const Hittable &world) const;
 
@@ -37,13 +37,16 @@ private:
   Vec3 defocus_disk_u_;
   Vec3 defocus_disk_v_;
 
+  Color background_;
+
   Camera(int image_width, int image_height, int samples_per_pixel,
          double pixel_samples_scale, int max_depth, Point center,
          Point pixel00_loc, Vec3 pixel_delta_u, Vec3 pixel_delta_v,
-         double defocus_angle, Vec3 defocus_disk_u, Vec3 defocus_disk_v);
+         double defocus_angle, Vec3 defocus_disk_u, Vec3 defocus_disk_v,
+         Color background);
 
-  [[nodiscard]] static Color ray_color(const Ray &ray, const Hittable &world,
-                                       int depth);
+  [[nodiscard]] Color ray_color(const Ray &ray, const Hittable &world,
+                                int depth) const;
   [[nodiscard]] static Color background_color(const Ray &ray);
 
   [[nodiscard]] Ray sample_ray(int i, int j) const;

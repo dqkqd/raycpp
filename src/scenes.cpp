@@ -14,9 +14,10 @@
 #include <utility>
 
 int bouncing_spheres() {
-  auto cam = Camera::init(
-      16.0 / 9.0, 400, 100, 50, 20, Point{.x = 13, .y = 2, .z = 3},
-      {.x = 0, .y = 0, .z = 0}, {.x = 0, .y = 1, .z = 0}, 0.6, 10.0);
+  auto cam =
+      Camera::init(16.0 / 9.0, 400, 100, 50, 20, Point{.x = 13, .y = 2, .z = 3},
+                   {.x = 0, .y = 0, .z = 0}, {.x = 0, .y = 1, .z = 0}, 0.6,
+                   10.0, {.r = 0.7, .g = 0.8, .b = 1.});
 
   auto world = World();
 
@@ -73,9 +74,10 @@ int bouncing_spheres() {
 }
 
 int checker_spheres() {
-  auto cam = Camera::init(
-      16.0 / 9.0, 400, 100, 50, 20, Point{.x = 13, .y = 2, .z = 3},
-      {.x = 0, .y = 0, .z = 0}, {.x = 0, .y = 1, .z = 0}, 0.6, 10.0);
+  auto cam =
+      Camera::init(16.0 / 9.0, 400, 100, 50, 20, Point{.x = 13, .y = 2, .z = 3},
+                   {.x = 0, .y = 0, .z = 0}, {.x = 0, .y = 1, .z = 0}, 0.6,
+                   10.0, {.r = 0.7, .g = 0.8, .b = 1.});
 
   auto world = World();
 
@@ -98,7 +100,8 @@ int checker_spheres() {
 int earth() {
   auto cam =
       Camera::init(16.0 / 9.0, 400, 100, 50, 20, Point{.x = 0, .y = 0, .z = 12},
-                   {.x = 0, .y = 0, .z = 0}, {.x = 0, .y = 1, .z = 0}, 0, 10.0);
+                   {.x = 0, .y = 0, .z = 0}, {.x = 0, .y = 1, .z = 0}, 0, 10.0,
+                   {.r = 0.7, .g = 0.8, .b = 1.});
 
   auto world = World();
 
@@ -118,7 +121,8 @@ int earth() {
 int perlin_spheres() {
   auto cam =
       Camera::init(16.0 / 9.0, 400, 100, 50, 20, Point{.x = 13, .y = 2, .z = 3},
-                   {.x = 0, .y = 0, .z = 0}, {.x = 0, .y = 1, .z = 0}, 0, 10.0);
+                   {.x = 0, .y = 0, .z = 0}, {.x = 0, .y = 1, .z = 0}, 0, 10.0,
+                   {.r = 0.7, .g = 0.8, .b = 1.});
 
   auto world = World();
 
@@ -137,9 +141,9 @@ int perlin_spheres() {
 };
 
 int quads() {
-  auto cam =
-      Camera::init(1.0, 400, 100, 50, 80, Point{.x = 0, .y = 0, .z = 9},
-                   {.x = 0, .y = 0, .z = 0}, {.x = 0, .y = 1, .z = 0}, 0, 10.0);
+  auto cam = Camera::init(1.0, 400, 100, 50, 80, Point{.x = 0, .y = 0, .z = 9},
+                          {.x = 0, .y = 0, .z = 0}, {.x = 0, .y = 1, .z = 0}, 0,
+                          10.0, {.r = 0.7, .g = 0.8, .b = 1.});
 
   auto world = World();
 
@@ -176,3 +180,31 @@ int quads() {
 
   return 0;
 };
+
+int simple_light() {
+  auto cam =
+      Camera::init(16.0 / 9.0, 400, 100, 50, 20, Point{.x = 26, .y = 3, .z = 6},
+                   {.x = 0, .y = 2, .z = 0}, {.x = 0, .y = 1, .z = 0}, 0, 10.0,
+                   {.r = 0, .g = 0, .b = 0});
+
+  auto world = World();
+
+  auto pertext = std::make_shared<NoiseTexture>(4);
+  world.add(std::make_unique<Sphere>(Point{.x = 0, .y = -1000, .z = 0}, 1000,
+                                     std::make_shared<Lambertian>(pertext)));
+  world.add(std::make_unique<Sphere>(Point{.x = 0, .y = 2, .z = 0}, 2,
+                                     std::make_shared<Lambertian>(pertext)));
+
+  auto difflight =
+      std::make_shared<DiffuseLight>(Color{.r = 4, .g = 4, .b = 4});
+  world.add(std::make_unique<Quad>(Point{.x = 3, .y = 1, .z = -2},
+                                   Vec3{.x = 2, .y = 0, .z = 0},
+                                   Vec3{.x = 0, .y = 2, .z = 0}, difflight));
+
+  auto world_tree = BvhNode(std::move(world));
+  if (!cam.render(world_tree)) {
+    return 1;
+  }
+
+  return 0;
+}

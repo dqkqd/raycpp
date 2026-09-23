@@ -20,7 +20,8 @@
 
 Camera Camera::init(double aspect_ratio, int image_width, int samples_per_pixel,
                     int max_depth, double vfov, Point lookfrom, Point lookat,
-                    Vec3 vup, double defocus_angle, double focus_dist) {
+                    Vec3 vup, double defocus_angle, double focus_dist,
+                    Color background) {
   auto image_height = static_cast<int>(image_width / aspect_ratio);
 
   auto theta = degree_to_radian(vfov);
@@ -52,19 +53,22 @@ Camera Camera::init(double aspect_ratio, int image_width, int samples_per_pixel,
   return {
       image_width,   image_height,  samples_per_pixel, 1.0 / samples_per_pixel,
       max_depth,     center,        pixel00_loc,       pixel_delta_u,
-      pixel_delta_v, defocus_angle, defocus_disk_u,    defocus_disk_v};
+      pixel_delta_v, defocus_angle, defocus_disk_u,    defocus_disk_v,
+      background};
 }
 
 Camera::Camera(int image_width, int image_height, int samples_per_pixel,
                double pixel_samples_scale, int max_depth, Point center,
                Point pixel00_loc, Vec3 pixel_delta_u, Vec3 pixel_delta_v,
-               double defocus_angle, Vec3 defocus_disk_u, Vec3 defocus_disk_v)
+               double defocus_angle, Vec3 defocus_disk_u, Vec3 defocus_disk_v,
+               Color background)
     : image_width_(image_width), image_height_(image_height),
       samples_per_pixel_(samples_per_pixel),
       pixel_samples_scale_(pixel_samples_scale), max_depth_(max_depth),
       center_(center), pixel00_loc_(pixel00_loc), pixel_delta_u_(pixel_delta_u),
       pixel_delta_v_(pixel_delta_v), defocus_angle_(defocus_angle),
-      defocus_disk_u_(defocus_disk_u), defocus_disk_v_(defocus_disk_v) {}
+      defocus_disk_u_(defocus_disk_u), defocus_disk_v_(defocus_disk_v),
+      background_(background) {}
 
 bool Camera::render(const Hittable &world) const {
 
@@ -166,21 +170,30 @@ Ray Camera::sample_ray(int i, int j) const {
   return {ray_origin, pixel_sample - ray_origin, random_double()};
 }
 
-Color Camera::ray_color(const Ray &ray, const Hittable &world, int depth) {
+Color Camera::ray_color(const Ray &ray, const Hittable &world,
+                        int depth) const {
   static const Color black = {.r = 0, .g = 0, .b = 0};
   if (depth <= 0) {
     return black;
   }
   auto rec = world.hit(ray, {0.001, INFINITY});
-  if (rec.has_value()) {
-    auto scatter = rec->material_->scatter(ray, *rec);
-    if (scatter.has_value()) {
-      return scatter->attenuation *
-             ray_color(scatter->scattered, world, depth - 1);
-    }
-    return black;
+
+  if (!rec.has_value()) {
+    return background_;
   }
-  return background_color(ray);
+
+  auto color_from_emission =
+      rec->material_->emitted(rec->coord_, rec->hit_point_);
+
+  auto scatter = rec->material_->scatter(ray, *rec);
+  if (!scatter.has_value()) {
+    return color_from_emission;
+  }
+
+  auto color_from_scatter =
+      scatter->attenuation * ray_color(scatter->scattered, world, depth - 1);
+
+  return color_from_emission + color_from_scatter;
 }
 
 Color Camera::background_color(const Ray &ray) {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "color.hpp"
+#include "point.hpp"
 #include "ray.hpp"
 #include "texture.hpp"
 #include <cmath>
@@ -25,7 +26,14 @@ public:
   virtual ~Material() = default;
 
   [[nodiscard]] virtual std::optional<Scatter>
-  scatter(const Ray &ray, const HitRecord &rec) const = 0;
+  scatter(const Ray & /*ray*/, const HitRecord & /*rec*/) const {
+    return {};
+  };
+
+  [[nodiscard]] virtual Color emitted(const TextureCoordinate & /*coord*/,
+                                      const Point & /*p*/) const {
+    return {.r = 0, .g = 0, .b = 0};
+  }
 };
 
 class Lambertian : public Material {
@@ -67,4 +75,16 @@ private:
     r0 = r0 * r0;
     return r0 + ((1 - r0) * std::pow(1 - cosine, 5));
   }
+};
+
+class DiffuseLight : public Material {
+public:
+  explicit DiffuseLight(std::shared_ptr<Texture> tex);
+  explicit DiffuseLight(const Color &emit);
+
+  [[nodiscard]] Color emitted(const TextureCoordinate &coord,
+                              const Point &p) const override;
+
+private:
+  std::shared_ptr<Texture> tex_;
 };

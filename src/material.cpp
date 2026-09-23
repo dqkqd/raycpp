@@ -1,6 +1,7 @@
 #include "material.hpp"
 #include "color.hpp"
 #include "hit.hpp"
+#include "point.hpp"
 #include "ray.hpp"
 #include "texture.hpp"
 #include "utils.hpp"
@@ -73,4 +74,14 @@ std::optional<Scatter> Dielectrics::scatter(const Ray &ray,
   auto refracted = unit_direction.refract(rec.normal_, ri);
   auto scattered = Ray{rec.hit_point_, refracted, ray.time_};
   return Scatter{.scattered = scattered, .attenuation = attenuation};
+}
+
+DiffuseLight::DiffuseLight(std::shared_ptr<Texture> tex)
+    : tex_(std::move(tex)) {}
+DiffuseLight::DiffuseLight(const Color &emit)
+    : tex_(std::make_shared<SolidColor>(emit)) {}
+
+Color DiffuseLight::emitted(const TextureCoordinate &coord,
+                            const Point &p) const {
+  return tex_->value(coord, p);
 }

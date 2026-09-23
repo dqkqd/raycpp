@@ -5,3 +5,4 @@
 [[maybe_unused]] int earth();
 [[maybe_unused]] int perlin_spheres();
 [[maybe_unused]] int quads();
+[[maybe_unused]] int simple_light();
