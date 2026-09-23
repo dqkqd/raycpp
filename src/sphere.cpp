@@ -63,12 +63,8 @@ std::optional<HitRecord> Sphere::hit(const Ray &ray, Interval interval) const {
 
   auto coord = texture_coordinate(normal);
 
-  if (normal.dot(ray.direction_) > 0) {
-    return HitRecord(hit_point, HitRecord::Direction::Inward, -normal, distance,
-                     material_, coord);
-  }
-  return HitRecord(hit_point, HitRecord::Direction::Outward, normal, distance,
-                   material_, coord);
+  return HitRecord(hit_point, ray.direction_, normal, distance, material_,
+                   coord);
 }
 
 AABB Sphere::bounding_box() const { return bbox; }

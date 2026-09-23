@@ -18,13 +18,13 @@ public:
 
   Point hit_point_;
   Direction direction_;
-  Vec3 normal_;
+  Vec3 normal_{};
   double distance_;
   std::shared_ptr<Material> material_;
 
   TextureCoordinate coord_;
 
-  HitRecord(Point hit_point, Direction direction, Vec3 normal, double distance,
+  HitRecord(Point hit_point, Vec3 ray_direction, Vec3 normal, double distance,
             std::shared_ptr<Material> material, TextureCoordinate tex_coord);
 };
 
